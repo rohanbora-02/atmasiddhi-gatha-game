@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atamsiddhi Gatha Generator. </title>
+    <title>Atamsiddhi Gatha Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 1%;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Make sure the body takes up the full viewport height */
+            background-color: lightblue;
         }
 
-        #generateButton {
+        .wrapper {
+            flex: 1; /* Allows the wrapper to expand and push the footer to the bottom */
+        }
+
+        #generateButton, #playAgainButton {
             padding: 10px 30px;
             font-size: 24px;
-            background-color: red;
-            border: none;
+            border: 3px solid black;
             color: white;
             cursor: pointer;
             margin-bottom: 2em;
         }
 
+        #generateButton {
+            background-color: red;
+        }
+
+        #playAgainButton {
+            background-color: blue;
+        }
+
         #videoPlayer {
             display: none;
-            width: 60%; /* or any size you want */
+            width: 60%;
             height: auto;
             margin: 20px auto;
+            border: 20px solid black;
         }
 
         #answerBox {
@@ -59,20 +76,69 @@
             width: fit-content;
             margin: 20px auto;
         }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: yellow;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-container {
+            display: flex; /* Use flexbox for layout */
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Add space between items */
+            padding: 0 20px; /* Add padding for better appearance */
+        }
+
+        .footer-container img {
+            max-width: 200px; /* Restricting the width for demo, adjust as needed */
+            margin-right: 20px; /* Space between the image and the text content */
+        }
+
+        .footer-text {
+            text-align: left; /* Adjusted for the links and text next to image */
+        }
+
     </style>
 </head>
-<body>
-    <h2>Press the red button below to generate a random Atamsiddhi Gatha. Enter the correct gatha number to win a special prize. </h2>
-    <button id="generateButton" onclick="playRandomVideo()">Generate Video</button>
-    <video id="videoPlayer" controls onended="afterVideoEnd()"></video>
 
-    <div id="answerBox">
-        <input type="text" id="answerInput" placeholder="Type your answer here">
-        <br>
-        <button id="submitButton" onclick="checkAnswer()">Submit</button>
+<body>
+
+    <div class="wrapper">
+        <h2>Press the red button below to generate a random Atamsiddhi Gatha. Enter the correct gatha number to win a special prize.</h2>
+        <button id="generateButton" onclick="playRandomVideo()">Generate Video</button>
+        <button id="playAgainButton" onclick="resetGame()">Play Again</button>
+        <video id="videoPlayer" controls onended="afterVideoEnd()"></video>
+
+        <div id="answerBox">
+            <input type="text" id="answerInput" placeholder="Type your answer here">
+            <br>
+            <button id="submitButton" onclick="checkAnswer()">Submit</button>
+        </div>
+
+        <div id="feedback"></div>
     </div>
 
-    <div id="feedback"></div>
+    <footer>
+        <div class="footer-container">
+            <img src="data:image/png;base64,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" alt="Your Image Description">
+
+            <div class="footer-text">
+                Atmasiddhi Lectures by Pujya Gurudevshri Rakeshji: <a href="https://shorturl.at/auZ57" target="_blank">Click here</a><br>
+                Complete Atmasiddhi Pujan: <a href="https://www.youtube.com/watch?v=B28HIFcJcrE" target="_blank">Click here</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
         const videoLinks = [
@@ -217,7 +283,8 @@
         "https://dl.dropboxusercontent.com/scl/fi/rkualpo3yeor89nz4vysi/65.mp4?rlkey=vffbbum7856zzxolvzk4c0bpw&dl=0",
         "https://dl.dropboxusercontent.com/scl/fi/yxsvkcb5mxouiv76oxcgz/64.mp4?rlkey=btxre0y0a9mhe9ibqkr0tivxr&dl=0",
         "https://dl.dropboxusercontent.com/scl/fi/fucr3kkdmv150dl5v19qa/70.mp4?rlkey=h2o8tmtg7wdq2u4mt45c169dc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/o9o0dt57ltfkvtn43vwd6/58.mp4?rlkey=8in6rg59816pmyc7jrapoy7gc&dl=0",
+        "https://dl.dropboxusercontent.com/scl/fi/o9o0dt57ltfkvtn43vwd6/58.mp4?rlkey=8in6rg59816pmyc7jrapoy7gc&dl=0"
+            
         ];
 
         let currentVideoName = "";
@@ -226,7 +293,6 @@
             const videoElement = document.getElementById("videoPlayer");
             const randomIndex = Math.floor(Math.random() * videoLinks.length);
             const chosenLink = videoLinks[randomIndex];
-
             currentVideoName = chosenLink.split("/").slice(-1)[0].split(".")[0];
             videoElement.src = chosenLink;
             videoElement.style.display = "block";
@@ -240,16 +306,22 @@
         function checkAnswer() {
             const inputVal = document.getElementById("answerInput").value;
             const feedback = document.getElementById("feedback");
-
             if (inputVal === currentVideoName) {
                 feedback.innerHTML = "You got it right!";
-            } 
-            else {
+            } else {
                 feedback.innerHTML = "That's incorrect. The correct answer is: " + currentVideoName;
             }
             feedback.style.display = "block";
-}
-        
+        }
+
+        function resetGame() {
+            document.getElementById("videoPlayer").style.display = "none";
+            document.getElementById("answerBox").style.display = "none";
+            document.getElementById("feedback").style.display = "none";
+            document.getElementById("answerInput").value = '';
+        }
     </script>
+
 </body>
+
 </html>
