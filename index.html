@@ -2,340 +2,751 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atamsiddhi Gatha Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 1%;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh; /* Make sure the body takes up the full viewport height */
-            background-color: lightblue;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Atmasiddhi Gatha Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .wrapper {
-            flex: 1; /* Allows the wrapper to expand and push the footer to the bottom */
-        }
+    :root {
+      --deep-navy: #0d1b2a;
+      --indigo: #1b2f5c;
+      --gold: #c9943a;
+      --gold-light: #e8b85a;
+      --gold-pale: #f5e3b8;
+      --white: #ffffff;
+      --off-white: #f8f5ef;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --success-bg: #064e3b;
+      --success-border: #10b981;
+      --error-bg: #7f1d1d;
+      --error-border: #ef4444;
+      --card-bg: rgba(255,255,255,0.97);
+      --shadow: 0 20px 60px rgba(0,0,0,0.3);
+      --radius: 16px;
+    }
 
-        #generateButton, #playAgainButton {
-            padding: 10px 30px;
-            font-size: 24px;
-            border: 3px solid black;
-            color: white;
-            cursor: pointer;
-            margin-bottom: 0.5em;
-        }
+    html, body {
+      height: 100%;
+    }
 
-        #generateButton {
-            background-color: red;
-        }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b2f5c 50%, #0d1b2a 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--text-dark);
+    }
 
-        #playAgainButton {
-            background-color: blue;
-        }
+    /* ‚îÄ‚îÄ Header ‚îÄ‚îÄ */
+    header {
+      text-align: center;
+      padding: 36px 20px 20px;
+      position: relative;
+    }
 
-        #videoPlayer {
-            display: none;
-            width: 60%;
-            height: auto;
-            margin: 10px auto;
-            border: 20px solid black;
-        }
+    .header-ornament {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
 
-        #answerBox {
-            display: none;
-            margin: 10px auto;
-            width: 300px;
-        }
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(22px, 5vw, 38px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 2px;
+      line-height: 1.2;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
 
-        #answerInput {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
+    header h1 span {
+      color: var(--gold-light);
+    }
 
-        #submitButton {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
-        }
+    .header-subtitle {
+      margin-top: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
 
-        #feedback {
-            display: none;
-            border: 1px solid #333;
-            padding: 10px;
-            margin-top: 20px;
-            width: fit-content;
-            margin: 20px auto;
-        }
+    .gold-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+      margin: 14px auto 0;
+    }
 
-        footer {
-            background-color: #FFFFFF;
-            color: black;
-            padding: 10px 0;
-            text-align: center;
-        }
+    /* ‚îÄ‚îÄ Main card ‚îÄ‚îÄ */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px 16px 30px;
+    }
 
-        footer a {
-            color: blue;
-            text-decoration: none;
-        }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 680px;
+      overflow: hidden;
+    }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
-        
-        .footer-container {
-            display: flex; /* Use flexbox for layout */
-            align-items: center; /* Center items vertically */
-            justify-content: space-between; /* Add space between items */
-            padding: 0 20px; /* Add padding for better appearance */
-        }
+    .card-inner {
+      padding: 32px 28px;
+    }
 
-        .footer-container img {
-            max-width: 200px; /* Restricting the width for demo, adjust as needed */
-            margin-right: 20px; /* Space between the image and the text content */
-        }
+    /* ‚îÄ‚îÄ Score bar ‚îÄ‚îÄ */
+    .score-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-        .footer-text {
-            text-align: left; /* Adjusted for the links and text next to image */
-        }
+    .score-item {
+      text-align: center;
+    }
 
-    </style>
+    .score-value {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--indigo);
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .score-divider {
+      width: 1px;
+      background: #e5e7eb;
+      align-self: stretch;
+    }
+
+    /* ‚îÄ‚îÄ Instruction ‚îÄ‚îÄ */
+    .instruction {
+      text-align: center;
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* ‚îÄ‚îÄ Buttons ‚îÄ‚îÄ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 32px;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--deep-navy);
+      box-shadow: 0 4px 20px rgba(201,148,58,0.45);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 28px rgba(201,148,58,0.6);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--indigo);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(27,47,92,0.3);
+    }
+
+    .btn-secondary:hover {
+      background: #243a72;
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(16,185,129,0.35);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(16,185,129,0.5);
+    }
+
+    .btn-icon {
+      font-size: 18px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    /* ‚îÄ‚îÄ Video player ‚îÄ‚îÄ */
+    .video-wrapper {
+      display: none;
+      margin: 24px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--gold-pale);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      background: #000;
+      position: relative;
+    }
+
+    .video-wrapper.visible {
+      display: block;
+    }
+
+    #videoPlayer {
+      width: 100%;
+      display: block;
+      max-height: 360px;
+    }
+
+    .video-label {
+      background: linear-gradient(90deg, var(--indigo), #243a72);
+      color: var(--gold-light);
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      padding: 8px 16px;
+      text-align: center;
+    }
+
+    /* ‚îÄ‚îÄ Answer section ‚îÄ‚îÄ */
+    .answer-section {
+      display: none;
+      margin-top: 24px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .answer-section.visible {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .answer-label {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    #answerInput {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 20px;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid #d1d5db;
+      border-radius: 50px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      color: var(--indigo);
+      background: #fff;
+      -moz-appearance: textfield;
+    }
+
+    #answerInput::-webkit-outer-spin-button,
+    #answerInput::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    #answerInput:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,148,58,0.18);
+    }
+
+    /* ‚îÄ‚îÄ Feedback ‚îÄ‚îÄ */
+    .feedback-box {
+      display: none;
+      margin-top: 20px;
+      padding: 18px 22px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .feedback-box.visible {
+      display: block;
+    }
+
+    .feedback-box.correct {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      color: #065f46;
+    }
+
+    .feedback-box.incorrect {
+      background: #fee2e2;
+      border: 2px solid #ef4444;
+      color: #7f1d1d;
+    }
+
+    .feedback-icon {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ‚îÄ‚îÄ Loading state ‚îÄ‚îÄ */
+    .loading-hint {
+      display: none;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    /* ‚îÄ‚îÄ Footer ‚îÄ‚îÄ */
+    footer {
+      background: rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+    }
+
+    .footer-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 8px;
+      opacity: 0.9;
+    }
+
+    .footer-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .footer-text p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    .footer-text a {
+      color: var(--gold-light);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* ‚îÄ‚îÄ Mobile responsiveness ‚îÄ‚îÄ */
+    @media (max-width: 480px) {
+      .card-inner {
+        padding: 24px 18px;
+      }
+
+      .score-bar {
+        gap: 20px;
+      }
+
+      .score-value {
+        font-size: 22px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 13px 22px;
+      }
+
+      .input-row {
+        flex-direction: column;
+        max-width: 260px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="wrapper">
-        <h2>Press the red button below to generate a random Atamsiddhi Gatha. Enter the correct gatha number to win a special prize.</h2>
-        <button id="generateButton" onclick="playRandomVideo()">Generate Video</button>
-        <button id="playAgainButton" onclick="resetGame()">Play Again</button>
-        <video id="videoPlayer" controls onended="afterVideoEnd()"></video>
+  <!-- Header -->
+  <header>
+    <p class="header-ornament">‚ú¶ Shrimad Rajchandra Mission Dharampur ‚ú¶</p>
+    <h1>Atmasiddhi <span>Gatha</span> Quiz</h1>
+    <p class="header-subtitle">Watch the gatha, then identify the correct number</p>
+    <div class="gold-divider"></div>
+  </header>
 
-        <div id="answerBox">
-            <input type="text" id="answerInput" placeholder="Type your answer here">
-            <br>
-            <button id="submitButton" onclick="checkAnswer()">Submit</button>
+  <!-- Main content -->
+  <div class="main-wrapper">
+    <div class="card">
+      <div class="card-inner">
+
+        <!-- Score -->
+        <div class="score-bar">
+          <div class="score-item">
+            <div class="score-value" id="scoreCorrect">0</div>
+            <div class="score-label">Correct</div>
+          </div>
+          <div class="score-divider"></div>
+          <div class="score-item">
+            <div class="score-value" id="scoreTotal">0</div>
+            <div class="score-label">Played</div>
+          </div>
+          <div class="score-divider"></div>
+          <div class="score-item">
+            <div class="score-value" id="scorePct">‚Äî</div>
+            <div class="score-label">Accuracy</div>
+          </div>
         </div>
 
-        <div id="feedback"></div>
+        <!-- Instruction & Generate button -->
+        <p class="instruction">
+          Press <strong>Generate Gatha</strong> to play a random video, then enter the gatha number once it finishes.
+        </p>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="generateButton" onclick="playRandomVideo()">
+            <span class="btn-icon">‚ñ∂</span> Generate Gatha
+          </button>
+          <button class="btn btn-secondary" id="playAgainButton" onclick="resetGame()" style="display:none;">
+            <span class="btn-icon">‚Ü∫</span> Play Again
+          </button>
+        </div>
+
+        <!-- Video -->
+        <div class="video-wrapper" id="videoWrapper">
+          <div class="video-label">Now Playing ‚Äî Identify this Gatha</div>
+          <video id="videoPlayer" controls onended="afterVideoEnd()"></video>
+        </div>
+
+        <!-- Answer box -->
+        <div class="answer-section" id="answerBox">
+          <div class="answer-label">Which gatha number is this?</div>
+          <div class="input-row">
+            <input
+              type="number"
+              id="answerInput"
+              placeholder="‚Ññ"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              min="1"
+              max="200"
+              autocomplete="off"
+            >
+            <button class="btn btn-success" onclick="checkAnswer()">Submit</button>
+          </div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback-box" id="feedback"></div>
+
+      </div><!-- /card-inner -->
+    </div><!-- /card -->
+  </div><!-- /main-wrapper -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <img
+        class="footer-logo"
+        src="data:image/png;base64,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£6ìÜñv÷ßáÇ∑ÉVÂw∆¥tGt∑ìÉ'tSG'VÑµáñ’e'§ág'7t∆Cc'46#4˜V¢ˆÚ≤¥ƒ„tñ¥îww$Vî∆c#îg•ìÜµ¶eTï#Ü∑#4dÉsFVFWT∑ï7Fóîî56GD6∑tÙƒ5áv7„$ìóRıE¢ˆÖóß'É&&¥„Eddu7DDE6d«Ös&•$ˆSwï$É§B∂$VñsDî¢∂Sf¢∑U'&ÉÑ≥ÉÜ#&T'ñ¥ÖÖß4•µdgU§sUf'§UñTÑ∑ñEg'2¥Tî6ós4ÜÉEBÚıVˆDTbı¢∑§4#Tı$wbÛÉìfÉ%ÜóCvD#sïGut÷WD'gtsfÛT$§g&&ït∆6Â7w2ˆ•ÑƒwÑ◊fñV∂ı7Ü&4ïeUÑÛÉdñˆ6¥wÑÛ'6ïFSÉgcd‚¥3Ed•ScñÁáì5Ü•'Dˆˆóáv‘¶˜7á∑óWF„ÉF3ñ$6√ó''5óñV&vÑÖ£SfFU&£FUV«◊T‘ñ3ï6”î◊£7ááÛî¥v''$Ñóìf#á$vÊ’WG'£z2zWFG/b40uhyjRo0aNWrU71n/DyGlapRpsTL4AAAAAElFTkSuQmCC"
+        alt="SRMD Logo"
+      >
+      <div class="footer-text">
+        <p>¬© 2024 <a href="https://www.srmd.org" target="_blank">Shrimad Rajchandra Mission Dharampur</a>. All rights reserved.</p>
+        <p>Follow: <a href="https://www.facebook.com/shrimadrajchandramissiondharampur/" target="_blank">Facebook</a> &nbsp;|&nbsp; <a href="https://www.instagram.com/srmdharampur/" target="_blank">Instagram</a></p>
+      </div>
     </div>
+  </footer>
 
-    <footer>
-        <div class="footer-container">
-            <img src="data:image/png;base64,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" alt="Your Image Description">
+  <script>
+    const videoLinks = [
+      "https://dl.dropboxusercontent.com/scl/fi/zqmfq0pl1ebymyjbeboou/96.mp4?rlkey=fir28noh6ycsvt4ki35pde3a8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/pqkmk942goyf3n4vkbgoo/82.mp4?rlkey=zuxr9xx6yk74bof7gkjx4wiun&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/0d4kl67k8ncz19i9wx9bm/140.mp4?rlkey=k2iyit395nlq3fg3xfrwa000u&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fmzkidjjgt742rapnp9to/7.mp4?rlkey=7jxkykt5r4sn5gajj1a4yxasj&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/u0lvokbb7c817u643n4sh/55.mp4?rlkey=cwm4pjs4wxhv475lgpvwi94uu&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/5ra1m2cqejtyu0l5g6bhn/41.mp4?rlkey=o91e8kejvk3xn8znx5t6n31f7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/e428ips3goi80ubn6zbty/69.mp4?rlkey=3c6kkvlqeo4vf8wu4kbh79tqz&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/d5rj7244ekw2tugjrz6zx/68.mp4?rlkey=su8lxe6yu54t9v6da42kwqxb1&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bnki5ne6asxdvsyiu3kph/40.mp4?rlkey=swgjtekzjrfxqw0m6e99ibrhc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/mq2f8pkck1omjuaojgb5x/6.mp4?rlkey=zss7drbie5udhuji8twangdhw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/h63yucs2olhr5jlkc8apz/54.mp4?rlkey=3ylv42hp6ygl7od4c55y1vvie&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/84i6276pzex9onk187yf9/141.mp4?rlkey=nj9x5th4tfpo9mwwy3lgx7bym&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/6kb8o5jo0ttd8cdxlh2sf/83.mp4?rlkey=h0xft6yg2cncurj88ks06xorc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/3ppt8yu3vp7c6mmprp8lv/97.mp4?rlkey=e9uodvg9ldzjg1e9zg37395dn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/voql9fmk6no37ju6nakwe/81.mp4?rlkey=p0emsic7yj21qz3o3u76lz0gn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/wu1oeylv2ntlubew4tovj/95.mp4?rlkey=u6brk1dh2ej2p4qjvkha698bt&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/0w6anlfp69wt5p5pf9z25/42.mp4?rlkey=p9kjifgmkg0trdzxs8nxnkg28&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/nnulw7u1bxlzigvcslymh/56.mp4?rlkey=kmxg4khkchcvu8le0uwzhtdf1&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fatt9uv4uy18o3pt934tr/4.mp4?rlkey=1f2p63i2sdceabjeprr04g69e&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/orrwpiub176k0qdm5ug5u/57.mp4?rlkey=mq6ij9tfec4lc5n9619m89s47&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/x2pazg9fs4qph2rtsggvb/5.mp4?rlkey=l53swbnh8g0zvo72b5r58l6n4&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ut9frdl8r8mwwwdkkumre/43.mp4?rlkey=76xxav4gqqh92xkirjvp4oeo8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/1b7yb0my3i62llyi2axgd/142.mp4?rlkey=i3w2ehc7qenposeindi3wqroo&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fp8q4kya2ffqhxk79amtd/94.mp4?rlkey=jowhnxav75o8nh72d0cylvhho&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/yosmn4e4r8mrec8yh3ujv/80.mp4?rlkey=4hyk93ida3l79o37wdkenyknx&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ab15v9xrzc9tpu703wvyn/84.mp4?rlkey=3u8047gt0ai27yiurp5idn781&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/s95t0qbgjcf2prohtxfl6/90.mp4?rlkey=bnm9tidsz5iurt7a5e3ox9599&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/jahjynhgus1xkpficpv6z/47.mp4?rlkey=d2hq0lkq2y27t1mp98medvdfa&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/zzlwhweeidjwmo9cta2oo/1.mp4?rlkey=s2pucdp3tprtu2xdmdpmib3wn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/hoxq514kc3w5ysznaajz2/53.mp4?rlkey=2x8w4zjm48gqd6z04umvklfrx&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/yzu6yyagw1flqunsrmosq/52.mp4?rlkey=m5fqwhst4aratykedzfdirdve&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/hnsiuymdl2hcvsm25yf84/46.mp4?rlkey=h24f1jk7nvge9td7efpacr88n&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/e4bkkx8wfe4duqk2fetod/91.mp4?rlkey=i7t6bcdbnpxh55uqdy0hn5nza&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/687l35x3hb2k4lwptyyz9/85.mp4?rlkey=vjhd6z2drkbkulamdpo5mo5il&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4ntso8meljb0bc7476yxi/93.mp4?rlkey=csuzlpxq27do5lg42vsnj5ocx&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/mlgsycl8uimvirfbj1f49/87.mp4?rlkey=viqk32inarsc0xppztcu0z8sd&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/pfnpee1nhobne8yk44dw6/78.mp4?rlkey=gx7j5lem09kenxexwfog0203r&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/rflc83uxpxswdppxhg6ll/50.mp4?rlkey=vh7nosn5tth7m51gx9qbgtc8a&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/v78grtj7tdwazzi35ukc7/2.mp4?rlkey=whuypq2ir5w5x69x38jbn9p6o&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/75nvxfqgr1os3ljf75px7/44.mp4?rlkey=qwjk6mfmej8qbnvpn4l6583e7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/y7ctz9itfq251lh71jp5a/45.mp4?rlkey=ullvl9206nc9c9nvq7o0k2xon&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ebji7yf54yb10vrp0sq0e/51.mp4?rlkey=2lbe1c9y00zc2l5k0m417p99o&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ffgdq0hgwr91tdkb3k0bm/3.mp4?rlkey=oo3uyd9rswu7r80w0t7jw54zt&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/t8nhgo26uujl7kiqv5dem/79.mp4?rlkey=3ydj5666517bkylpqa5whcbbd&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/0rhvvwkhe90ihh17yuucc/86.mp4?rlkey=7gz888mwcckm13r5firyfnz4z&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/a84s45uwvf85dmbz96e4b/92.mp4?rlkey=wa190f9fjg4j6j1emnpz464qq&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/k26qg2d4smwuhlglp4e8e/137.mp4?rlkey=ohkiwl6gbsrmzcrbzzfh229wd&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ap5sc4shm9xsdyhtbg82v/123.mp4?rlkey=auloj2glv86xv0pupe9lflad5&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ydwqlvquy1gxf3i5bl48v/36.mp4?rlkey=p0bzmdwf2plr404ldiv97vsnm&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/hdb2ucyahge7shpmv3dxx/22.mp4?rlkey=wzrxnywse4rw1172hotxl0uh8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/d55hrjnzslc6jim7ag1b6/23.mp4?rlkey=eta0w2u8slfl5n0r0fqolki7v&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4uk99raz5u7l9xfmar5du/37.mp4?rlkey=by4nzz1196fljiuzaxd975t4c&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/s61pcxbcjd94fhaxxz8zz/122.mp4?rlkey=9nxk7i632y6vkk2k6sdx413ey&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/mzglj36qlth7vkwyjq391/136.mp4?rlkey=7jfa1c0q2vpng40mko7vm0lnl&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/m1acvhqljw3hikenwyutj/108.mp4?rlkey=htce4uwshhik4qxyl3noeh6l7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bu1j8du7s1pfz67uftahe/120.mp4?rlkey=02zjk98aqeu3m7g06v9hc6xvb&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/14ygkkr0q20anx94otmfe/134.mp4?rlkey=0mt8k6bjwlothyc75993vwcur&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/p607eqa7x7r3tu32x2agn/21.mp4?rlkey=7tcoeui3arg2ey25tny0h2hr2&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/8hs2ami5gr0rce7lalr9l/35.mp4?rlkey=ytsn0hpnkx2pgtsi6m5afrdbc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/we00o0m1ik18owkp37z06/34.mp4?rlkey=zlv32id9i4u8zf3ab0oqblnpm&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/egq0vl8mf006yl5bl5oe6/20.mp4?rlkey=naljaif0wmi0s2le93oigpty9&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/28vdg22jw96gw3kqsi6eh/135.mp4?rlkey=o7934vl74xbdb1ekv9uc2m9x8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/2xozn9cwruhy35nhambq7/121.mp4?rlkey=072b0incn1utu1wmlv97v881r&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/pyavetrtccfhl0jo94kap/109.mp4?rlkey=9a8wpxgyyicq59yhbd637ahsi&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/yvg7nud3qew13yxeu8ix3/125.mp4?rlkey=vq9lee8hr416eb1mjnufktonw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/uq9cftpk4hamjlvudvxwq/131.mp4?rlkey=8h8xy8lbkb0fo7hzthb2aq31y&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/m2elb141i46ki038haoud/119.mp4?rlkey=4np1zhze8j5foj01hv3449aub&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/mj1nriubj76ui0n5f0onz/18.mp4?rlkey=p14fdc4m4c90955ltwnqzwukv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/wgt75pds4ukrkd5raa74q/24.mp4?rlkey=verovgzvp76khnxbregsoj4cf&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/cl7xcbb3pi28b0kyxzabd/30.mp4?rlkey=kstx35lu4yj13sgo0ivgxsb8n&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qcqq9kq21h6bh4xspif8g/31.mp4?rlkey=phz0sew7iic33zy7ve8vkfaey&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/53eafae8niq96qxfe0byx/25.mp4?rlkey=j0unf3yz5wit7w6f37lskcakl&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/aurjtajus0k33142kft2a/19.mp4?rlkey=e8l60pp6fvedl5ghx4urjvapv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/781xt1n4679rfahnvq7yc/118.mp4?rlkey=dpgm2zourj558pjryewj7639e&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/yc0lpxujbfauge1ybjpef/130.mp4?rlkey=eqb5zl1k2tr1jbj3vvwpg9v42&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/53r2on2cskf2yvvldhd8m/124.mp4?rlkey=ec1hsl97hdoisvhts24c98lkp&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ruoz6b4ovasvaqhvbok95/132.mp4?rlkey=ltkxuzukvo5mvdors2byh756h&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/rjf0gyoaem3omcilefqsc/126.mp4?rlkey=rb6pmr3b1jpdb3t5m8ey3q348&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/kflgqf5zdrrnxxbi8gfoe/33.mp4?rlkey=7w0xb2gj8e8t6au4s2183uz9l&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qc4sodgi2nsmx7lo4272i/27.mp4?rlkey=963hg1xowxpfjpmstv7h1w2s5&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/2htw2vgzbzimptlf7fxls/26.mp4?rlkey=hcy79gs01sq5o5c29rraqt7b7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/wxy5krvjz36azmo08tu81/32.mp4?rlkey=888qiptedth20q17ddzujvk4s&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/kgdc5lbspcgg7ul424anc/127.mp4?rlkey=m61emvmnwa99o4kunysp71hz2&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/53xvi5w2hgpqyj05gw49/133.mp4?rlkey=nf9mqpkcd85gkcszac8vneiur&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/430xbv2i20uc00j67ghhj/116.mp4?rlkey=szxkoshev2twwwsthm73yv6cw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/lg2cmcmce0056u0g006nf/102.mp4?rlkey=q3g90js18d19ks664dmlhx166&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/t50xzti4a5tvlv0tab0vh/17.mp4?rlkey=4v91rwdewkk09c4r1v0hjw(ocv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/j4xdsl82hy314fvyynixd/16.mp4?rlkey=mn7jrk27cll5z4wmj62tkouvq&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/oeem7x2xguyojozzqcio2/103.mp4?rlkey=ycz0k385ry8mkzwzsjdu8e00k&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/vef6vlke2fnughg0xersr/117.mp4?rlkey=n5rf1x104r2ipih3qjd36uqqv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/wqnvb6i32qhfkq65o3634/129.mp4?rlkey=mllou1hbuem1ufcjv22kq034b&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/x47i0j3940pjdogpvgu1g/101.mp4?rlkey=gdhew4ubgip75qwxyhpkvtzou&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/z7q9zwclemuu8cw2q96jf/115.mp4?rlkey=ncel720wodqrw99v4602yfea4&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4fe0bbgyf7t6snmv8xu3s/14.mp4?rlkey=ejnzaao101hm3v5ne9g6804ke&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4kroyanoocc9ya8ds7mkz/28.mp4?rlkey=7ziei44uhe0w6z2das9e4y2ru&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/3xjfnroeqqt3y95l3bvow/29.mp4?rlkey=bdhun3r5tpuqrmlr4oakry4ad&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/plt3ehsitoe0h2fiy39u8/15.mp4?rlkey=xypvgj9cq41d4nk3dgmty89mn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bx6dq1bmnyzg0jznzoor4/114.mp4?rlkey=g8wlf0qtkytnv5ojpqok0pyya&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/wz7bh9t6byrggkrp07646/100.mp4?rlkey=b4y8107djm76c02lywgxd701x&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/zda8w818eatvy5aj3he4e/128.mp4?rlkey=1hd7titnlysbjhbe0niyy9p4a&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/p3tcptkq5dadgsq3ubn9h/104.mp4?rlkey=32hf8dlm4xukhr7j5w5nngrr0&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/s9'xqwmgjhrr3nsx7uz8b/110.mp4?rlkey=hjxbm8tsw45mrij20n591t85o&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/a0u1le61rfyy0my19m7e0/138.mp4?rlkey=2ml03d7nn219qw5h4g0qdp256&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qwuj01c8c2yudiukt17gl/39.mp4?rlkey=5lf0qd5m0285zjsgwd1v2nzqs&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/85a1z6dr0016tyo0igdcv/11.mp4?rlkey=t3x1cvj1w6wplrc3ts4z0dkcg&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunkve5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/03agnnbspqi9ov5fooxd7/38.mp4?rlkey=ztdhf1tmys9ymfmwd6gzolu6y&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/42xfv48weklmi99c9a7yf/139.mp4?rlkey=ifzul29a8wacf9y05mm71sruq&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ecrbhcgsylx72bfj1hk0r/111.mp4?rlkey=ozyy8bpm5joq6tvjg1msdhaoi&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/inkygndq0t25uei36p3w4/105.mp4?rlkey=qutac7v4drbnqw3f0fenjauyv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/e4epd3y86tc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/24d66pxmu8dfkmh1x56r2/107.mp4?rlkey=karvuipp52n9y8uialyafpwzl&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/erwnwe3y0cgmrp1xo3anj/12.mp4?rlkey=41qw6tet35b4sjqbujmnerj2p&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/up0hpdp0511w9a7t6mtbn/13.mp4?rlkey=18ng2xqjzm6hgl6xt0f9ekrbi&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/82966sukq0xafar9z59mg/106.mp4?rlkey=mswzk8a54j8b7xdhecdyne0tx&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/18mcgvjmb9svefwkk238g/112.mp4?rlkey=7oqzewa2e0yjmrmf93efgegjn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/2rwipg3rzsgltkzuz198q/74.mp4?rlkey=8zbjf3sl6sfr0cpj5w9nybwri&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bdqdgn5ge5twrpq14ac6v/60.mp4?rlkey=b6k14td9g1vzbl9oqplsx8h8t&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/6ueokb463cubvearmt5l6/48.mp4?rlkey=6w2hrs3aw4y108xtm23o1ox49&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/i3zjxlcm6ffxso53akuag/49.mp4?rlkey=wg0m73hzemvxw6ng4crimruh4&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fmf85dwezywjk8iujgwfh/61.mp4?rlkey=i992x4mzb32t9voe64gsrl7rg&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjjo6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/ss48ycyetsnv1dxe8452f/88.mp4?rlkey=u7mbt4urupdq9k5dk53r2baxc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/oopb3a5nt7zhpiq730dit/63.mp4?rlkey=ssvalann7ys47k87d2ek8ylcf&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/3152t1px1gpy3zjm8iiml/77.mp4?rlkey=46ysmsnpr6nrkstv6z0xbr9dw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/5a5usekiqcr76o4fj3m2h/76.mp4?rlkey=nnytlpxfryjy1tzuvszo37pvs&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/z5pihn49byw65ry5vtom5/62.mp4?rlkey=heo5vpi1psvpja9hb69y0rddn&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/159prnlj1jb7gck2boiwj/89.mp4?rlkey=zd8wtusj7dd5s4pnfitsfsmsy&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4eqjnrxhj6c276mec0aic/99.mp4?rlkey=5t7z8n2gbkrd6aa5v8i90izb7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qhj77ibc1fjg8f6w3q9fz/8.mp4?rlkey=dp15fzliqmwot42fi2m16n495&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bih1y1jttr&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/34hof02k5cv5xmwvpwybc/72.mp4?rlkey=g4odigc8svnzv0wfljztp572e&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/8l1qhcf5ean8btr5qx6qr/73.mp4?rlkey=fjftd2tv8wvylv0z50a3aw79x&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/9thre813uyj2go71cuske/67.mp4?rlkey=a8tyr989w2hpy5jw18xu1fzb8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/p3hd8kg4v5ksu146hrjyg/9.mp4?rlkey=mdf1r5ajfwe938owiip4alga5&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/0qkd9qc49qoti06z96pl1/98.mp4?rlkey=eppu9ib0mxdnpqtewnjup0y9l&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/3wqnhn2035dogvh7ljdb7/59.mp4?rlkey=4xbmu14cqfymi4ey54inqqoqw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/o2glecmmqxnuau5t087ap/71.mp4?rlkey=g6z37fq5rnuvvlgl9x68c47ux&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/rkualpo3yeor89nz4vysi/65.mp4?rlkey=vffbbum7856zzxolvzk4c0bpw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/yxsvkcb5mxouiv76oxcgz/64.mp4?rlkey=btxre0y0a9mhe9ibqkr0tivxr&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fucr3kkdmv150dl5v19qa/70.mp4?rlkey=h2o8tmtg7wdq2u4mt45c169dc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/o9o0dt57ltfkvtn43vwd6/58.mp4?rlkey=8in6rg59816pmyc7jrapoy7gc&dl=0"
+    ];
 
-            <div class="footer-text">
-                <p>¬© 2023 by <a href="www.srmd.org">Shirmad Rajcandra Mission Dharampur</a>. All rights reserved.</p>
-                <p>Follow us on:
-                    <a href="https://www.facebook.com/shrimadrajchandramissiondharampur/">Facebook</a> |
-                    <a href="https://www.instagram.com/srmdharampur/">Instagram</a> |
-                </p>
-            </div>
-        </div>
-    </footer>
+    let currentVideoName = "";
+    let totalPlayed = 0;
+    let totalCorrect = 0;
 
-    <script>
-        const videoLinks = [
-        "https://dl.dropboxusercontent.com/scl/fi/zqmfq0pl1ebymyjbeboou/96.mp4?rlkey=fir28noh6ycsvt4ki35pde3a8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/pqkmk942goyf3n4vkbgoo/82.mp4?rlkey=zuxr9xx6yk74bof7gkjx4wiun&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/0d4kl67k8ncz19i9wx9bm/140.mp4?rlkey=k2iyit395nlq3fg3xfrwa000u&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/fmzkidjjgt742rapnp9to/7.mp4?rlkey=7jxkykt5r4sn5gajj1a4yxasj&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/u0lvokbb7c817u643n4sh/55.mp4?rlkey=cwm4pjs4wxhv475lgpvwi94uu&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/5ra1m2cqejtyu0l5g6bhn/41.mp4?rlkey=o91e8kejvk3xn8znx5t6n31f7&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/e428ips3goi80ubn6zbty/69.mp4?rlkey=3c6kkvlqeo4vf8wu4kbh79tqz&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/d5rj7244ekw2tugjrz6zx/68.mp4?rlkey=su8lxe6yu54t9v6da42kwqxb1&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/bnki5ne6asxdvsyiu3kph/40.mp4?rlkey=swgjtekzjrfxqw0m6e99ibrhc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/mq2f8pkck1omjuaojgb5x/6.mp4?rlkey=zss7drbie5udhuji8twangdhw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/h63yucs2olhr5jlkc8apz/54.mp4?rlkey=3ylv42hp6ygl7od4c55y1vvie&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/84i6276pzex9onk187yf9/141.mp4?rlkey=nj9x5th4tfpo9mwwy3lgx7bym&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/6kb8o5jo0ttd8cdxlh2sf/83.mp4?rlkey=h0xft6yg2cncurj88ks06xorc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/3ppt8yu3vp7c6mmprp8lv/97.mp4?rlkey=e9uodvg9ldzjg1e9zg37395dn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/voql9fmk6no37ju6nakwe/81.mp4?rlkey=p0emsic7yj21qz3o3u76lz0gn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/wu1oeylv2ntlubew4tovj/95.mp4?rlkey=u6brk1dh2ej2p4qjvkha698bt&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/0w6anlfp69wt5p5pf9z25/42.mp4?rlkey=p9kjifgmkg0trdzxs8nxnkg28&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/nnulw7u1bxlzigvcslymh/56.mp4?rlkey=kmxg4khkchcvu8le0uwzhtdf1&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/fatt9uv4uy18o3pt934tr/4.mp4?rlkey=1f2p63i2sdceabjeprr04g69e&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/orrwpiub176k0qdm5ug5u/57.mp4?rlkey=mq6ij9tfec4lc5n9619m89s47&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/x2pazg9fs4qph2rtsggvb/5.mp4?rlkey=l53swbnh8g0zvo72b5r58l6n4&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ut9frdl8r8mwwwdkkumre/43.mp4?rlkey=76xxav4gqqh92xkirjvp4oeo8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/1b7yb0my3i62llyi2axgd/142.mp4?rlkey=i3w2ehc7qenposeindi3wqroo&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/fp8q4kya2ffqhxk79amtd/94.mp4?rlkey=jowhnxav75o8nh72d0cylvhho&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/yosmn4e4r8mrec8yh3ujv/80.mp4?rlkey=4hyk93ida3l79o37wdkenyknx&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ab15v9xrzc9tpu703wvyn/84.mp4?rlkey=3u8047gt0ai27yiurp5idn781&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/s95t0qbgjcf2prohtxfl6/90.mp4?rlkey=bnm9tidsz5iurt7a5e3ox9599&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/jahjynhgus1xkpficpv6z/47.mp4?rlkey=d2hq0lkq2y27t1mp98medvdfa&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/zzlwhweeidjwmo9cta2oo/1.mp4?rlkey=s2pucdp3tprtu2xdmdpmib3wn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/hoxq514kc3w5ysznaajz2/53.mp4?rlkey=2x8w4zjm48gqd6z04umvklfrx&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/yzu6yyagw1flqunsrmosq/52.mp4?rlkey=m5fqwhst4aratykedzfdirdve&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/hnsiuymdl2hcvsm25yf84/46.mp4?rlkey=h24f1jk7nvge9td7efpacr88n&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/e4bkkx8wfe4duqk2fetod/91.mp4?rlkey=i7t6bcdbnpxh55uqdy0hn5nza&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/687l35x3hb2k4lwptyyz9/85.mp4?rlkey=vjhd6z2drkbkulamdpo5mo5il&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/4ntso8meljb0bc7476yxi/93.mp4?rlkey=csuzlpxq27do5lg42vsnj5ocx&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/mlgsycl8uimvirfbj1f49/87.mp4?rlkey=viqk32inarsc0xppztcu0z8sd&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/pfnpee1nhobne8yk44dw6/78.mp4?rlkey=gx7j5lem09kenxexwfog0203r&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/rflc83uxpxswdppxhg6ll/50.mp4?rlkey=vh7nosn5tth7m51gx9qbgtc8a&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/v78grtj7tdwazzi35ukc7/2.mp4?rlkey=whuypq2ir5w5x69x38jbn9p6o&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/75nvxfqgr1os3ljf75px7/44.mp4?rlkey=qwjk6mfmej8qbnvpn4l6583e7&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/y7ctz9itfq251lh71jp5a/45.mp4?rlkey=ullvl9206nc9c9nvq7o0k2xon&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ebji7yf54yb10vrp0sq0e/51.mp4?rlkey=2lbe1c9y00zc2l5k0m417p99o&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ffgdq0hgwr91tdkb3k0bm/3.mp4?rlkey=oo3uyd9rswu7r80w0t7jw54zt&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/t8nhgo26uujl7kiqv5dem/79.mp4?rlkey=3ydj5666517bkylpqa5whcbbd&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/0rhvvwkhe90ihh17yuucc/86.mp4?rlkey=7gz888mwcckm13r5firyfnz4z&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/a84s45uwvf85dmbz96e4b/92.mp4?rlkey=wa190f9fjg4j6j1emnpz464qq&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/k26qg2d4smwuhlglp4e8e/137.mp4?rlkey=ohkiwl6gbsrmzcrbzzfh229wd&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ap5sc4shm9xsdyhtbg82v/123.mp4?rlkey=auloj2glv86xv0pupe9lflad5&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ydwqlvquy1gxf3i5bl48v/36.mp4?rlkey=p0bzmdwf2plr404ldiv97vsnm&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/hdb2ucyahge7shpmv3dxx/22.mp4?rlkey=wzrxnywse4rw1172hotxl0uh8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/d55hrjnzslc6jim7ag1b6/23.mp4?rlkey=eta0w2u8slfl5n0r0fqolki7v&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/4uk99raz5u7l9xfmar5du/37.mp4?rlkey=by4nzz1196fljiuzaxd975t4c&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/s61pcxbcjd94fhaxxz8zz/122.mp4?rlkey=9nxk7i632y6vkk2k6sdx413ey&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/mzglj36qlth7vkwyjq391/136.mp4?rlkey=7jfa1c0q2vpng40mko7vm0lnl&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/m1acvhqljw3hikenwyutj/108.mp4?rlkey=htce4uwshhik4qxyl3noeh6l7&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/bu1j8du7s1pfz67uftahe/120.mp4?rlkey=02zjk98aqeu3m7g06v9hc6xvb&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/14ygkkr0q20anx94otmfe/134.mp4?rlkey=0mt8k6bjwlothyc75993vwcur&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/p607eqa7x7r3tu32x2agn/21.mp4?rlkey=7tcoeui3arg2ey25tny0h2hr2&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/8hs2ami5gr0rce7lalr9l/35.mp4?rlkey=ytsn0hpnkx2pgtsi6m5afrdbc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/we00o0m1ik18owkp37z06/34.mp4?rlkey=zlv32id9i4u8zf3ab0oqblnpm&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/egq0vl8mf006yl5bl5oe6/20.mp4?rlkey=naljaif0wmi0s2le93oigpty9&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/28vdg22jw96gw3kqsi6eh/135.mp4?rlkey=o7934vl74xbdb1ekv9uc2m9x8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/2xozn9cwruhy35nhambq7/121.mp4?rlkey=072b0incn1utu1wmlv97v881r&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/pyavetrtccfhl0jo94kap/109.mp4?rlkey=9a8wpxgyyicq59yhbd637ahsi&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/yvg7nud3qew13yxeu8ix3/125.mp4?rlkey=vq9lee8hr416eb1mjnufktonw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/uq9cftpk4hamjlvudvxwq/131.mp4?rlkey=8h8xy8lbkb0fo7hzthb2aq31y&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/m2elb141i46ki038haoud/119.mp4?rlkey=4np1zhze8j5foj01hv3449aub&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/mj1nriubj76ui0n5f0onz/18.mp4?rlkey=p14fdc4m4c90955ltwnqzwukv&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/wgt75pds4ukrkd5raa74q/24.mp4?rlkey=verovgzvp76khnxbregsoj4cf&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/cl7xcbb3pi28b0kyxzabd/30.mp4?rlkey=kstx35lu4yj13sgo0ivgxsb8n&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/qcqq9kq21h6bh4xspif8g/31.mp4?rlkey=phz0sew7iic33zy7ve8vkfaey&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/53eafae8niq96qxfe0byx/25.mp4?rlkey=j0unf3yz5wit7w6f37lskcakl&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/aurjtajus0k33142kft2a/19.mp4?rlkey=e8l60pp6fvedl5ghx4urjvapv&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/781xt1n4679rfahnvq7yc/118.mp4?rlkey=dpgm2zourj558pjryewj7639e&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/yc0lpxujbfauge1ybjpef/130.mp4?rlkey=eqb5zl1k2tr1jbj3vvwpg9v42&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/53r2on2cskf2yvvldhd8m/124.mp4?rlkey=ec1hsl97hdoisvhts24c98lkp&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ruoz6b4ovasvaqhvbok95/132.mp4?rlkey=ltkxuzukvo5mvdors2byh756h&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/rjf0gyoaem3omcilefqsc/126.mp4?rlkey=rb6pmr3b1jpdb3t5m8ey3q348&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/kflgqf5zdrrnxxbi8gfoe/33.mp4?rlkey=7w0xb2gj8e8t6au4s2183uz9l&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/qc4sodgi2nsmx7lo4272i/27.mp4?rlkey=963hg1xowxpfjpmstv7h1w2s5&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/2htw2vgzbzimptlf7fxls/26.mp4?rlkey=hsy79gs01sq5o5c29rraqt7b7&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/wxy5krvjz36azmo08tu81/32.mp4?rlkey=888qiptedth20q17ddzujvk4s&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/kgdc5lbspcgg7ul424anc/127.mp4?rlkey=m61emvmnwa99o4kunysp71hz2&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/53xvik5w2hgpqyj05gw49/133.mp4?rlkey=nf9mqpkcd85gkcszac8vneiur&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/430xbv2i20uc00j67ghhj/116.mp4?rlkey=szxjishev2twwwsthm73yv6hw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/lg2cmcmce0056u0g006nf/102.mp4?rlkey=q3g90js18d19ks664dmlhx166&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/t50xzti4a5tvlv0tab0vh/17.mp4?rlkey=4v91rwdewkk09c4r1v0hjqocv&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/j4xdsl82hy314fvyynixd/16.mp4?rlkey=mn7jrk27cll5z4wmj62tkouvq&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/oeem7x2xguyojozzqcio2/103.mp4?rlkey=ycz0k385ry8mkzwzsjdu8e00k&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/vef6vlke2fnughg0xersr/117.mp4?rlkey=n5rf1x104r2ipih3qjd36uqqv&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/wqnvb6i32qhfkq65o3634/129.mp4?rlkey=mllou1hbuem1ufcjv22kq034b&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/x47i0j3940pjdogpvgu1g/101.mp4?rlkey=gdhew4ubgip75qwxyhpkvtzou&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/z7q9zwclemuu8cw2q96jf/115.mp4?rlkey=ncel720wodqrw99v4602yfea4&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/4fe0bbgyf7t6snmv8xu3s/14.mp4?rlkey=ejnzaao101hm3v5ne9g6804ke&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/4kroyanoocc9ya8ds7mkz/28.mp4?rlkey=7ziyi44uhe0w6z2das9e4y2ru&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/3xjfnroeqqt3y95l3bvow/29.mp4?rlkey=bdhun3r5tpuqrmlr4oakry4ad&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/plt3ehsitoe0h2fiy39u8/15.mp4?rlkey=xypvgj9cq41d4nk3dgmty89mn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/bx6dq1bmnyzg0jznzoor4/114.mp4?rlkey=g8wlf0qtkytnv5ojpqok0pyya&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/wz7bh9t6byrggkrp07646/100.mp4?rlkey=b4y8107djm76c02lywgxd701x&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/zda8w818eatvy5aj3he4e/128.mp4?rlkey=1hd7titnlysbjhbe0niyy9p4a&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/s3tcptkq5dadgsq3ubn9h/104.mp4?rlkey=32hf8dlm4xukhr7j5w5nngrr0&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/s97xqwmgjhrr3nsx7uz8b/110.mp4?rlkey=hjxbm8tsw45mrij20n591t85o&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/a0u1le61rfyy0my19m7e0/138.mp4?rlkey=2ml03d7nn219qw5h4g0qdp256&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/qwuj01c8c2yudiukt17gl/39.mp4?rlkey=5lf0qd5m0285zjsgwd1v2nzqs&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/85a1z6dr0016tyo0igdcv/11.mp4?rlkey=t3x1cvj1w6wplrc3ts4z0dkcg&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunkve5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/03agnnbspqi9ov5fooxd7/38.mp4?rlkey=ztdhf1tmys9ymfmwd6gzolu6y&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/42xfv48weklmi99c9a7yf/139.mp4?rlkey=ifzul29a8wacf9y05mm71sruq&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ecrbhcgsylx72bfj1hk0r/111.mp4?rlkey=ozyy8bpm5joq6tvjg1msdhaoi&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/inkygndq0t25uei36p3w4/105.mp4?rlkey=qutac7v4drbnqw3f0fenjauyv&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/e4epd3y86tc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/24d66pxmu8dfkmh1x56r2/107.mp4?rlkey=karvuipp52n9y8uialyafpwzl&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/erwnwe3y0cgmrp1xo3anj/12.mp4?rlkey=41qw6tet35b4sjqbujmnerj2p&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/up0hpdp0511w9a7t6mtbn/13.mp4?rlkey=18ng2xqjzm6hgl6xt0f9ekrbi&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/82966sukq0xafar9z59mg/106.mp4?rlkey=mswzk8a54j8b7xdhecdyne0tx&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/18mcgvjmb9svefwkk238g/112.mp4?rlkey=7oqzewa2e0yjmrmf93efgegjn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/2rwipg3rzsgltkzuz198q/74.mp4?rlkey=8zbjf3sl6sfr0cpj5w9nybwri&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/bdqdgn9ge5twrpq14ac6v/60.mp4?rlkey=b6k14td9g1vzbl9oqplsx8h8t&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/6ueokb463cubvearmt5l6/48.mp4?rlkey=6w2hrs3aw4y108xtm23o1ox49&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/i3zjxlcm6ffxso53akuag/49.mp4?rlkey=wg0m73hzemvxw6ng4crimruh4&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/fmf85dwezywjk8iujgwfh/61.mp4?rlkey=i992x4mzb32t9voe64gsrl7rg&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjjo6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/ss48ycyetsnv1dxe8452f/88.mp4?rlkey=u7mbt4urupdq9k5dk53r2baxc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/oopb3a5nt7zhpiq730dit/63.mp4?rlkey=ssvalann7ys47k87d2ek8ylcf&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/3152t1px1gpy3zjm8iiml/77.mp4?rlkey=46ysmsnpr6nrkstv6z0xbr9dw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/5a5usekiqcr76o4fj3m2h/76.mp4?rlkey=nnytlpxfryjy1tzuvszo37pvs&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/z5pihn49byw65ry5vtom5/62.mp4?rlkey=heo5vpi1psvpja9hb69y0rddn&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/159prnlj1jb7gck2boiwj/89.mp4?rlkey=zd8wtusj7dd5s4pnfitsfsmsy&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/4eqjnrxhj6c276mec0aic/99.mp4?rlkey=5t7z8n2gbkrd6aa5v8i90izb7&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/qhj77ibc1fjg8f6w3q9fz/8.mp4?rlkey=dp15fzliqmwot42fi2m16n495&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bih1y1jttr&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/34hof02k5cv5xmwvpwybc/72.mp4?rlkey=g4odigc8svnzv0wfljztp572e&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/8l1qhcf5ean8btr5qx6qr/73.mp4?rlkey=fjftd2tv8wvylv0z50a3aw79x&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/9thre813uyj2go71cuske/67.mp4?rlkey=a8tyr989w2hpy5jw18xu1fzb8&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/p3hd8kg4v5ksu146hrjyg/9.mp4?rlkey=mdf1r5ajfwe938owiip4alga5&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/0qkd9qc49qoti06z96pl1/98.mp4?rlkey=eppu9ib0mxdnpqtewnjup0y9l&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/3wqnhn2035dogvh7ljdb7/59.mp4?rlkey=4xbmu14cqfymi4ey54inqqoqw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/o2glecmmqxnuau5t087ap/71.mp4?rlkey=g6z37fq5rnuvvlgl9x68c47ux&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/rkualpo3yeor89nz4vysi/65.mp4?rlkey=vffbbum7856zzxolvzk4c0bpw&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/yxsvkcb5mxouiv76oxcgz/64.mp4?rlkey=btxre0y0a9mhe9ibqkr0tivxr&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/fucr3kkdmv150dl5v19qa/70.mp4?rlkey=h2o8tmtg7wdq2u4mt45c169dc&dl=0",
-        "https://dl.dropboxusercontent.com/scl/fi/o9o0dt57ltfkvtn43vwd6/58.mp4?rlkey=8in6rg59816pmyc7jrapoy7gc&dl=0"
-            
-        ];
+    function updateScoreboard() {
+      document.getElementById('scoreCorrect').textContent = totalCorrect;
+      document.getElementById('scoreTotal').textContent = totalPlayed;
+      document.getElementById('scorePct').textContent =
+        totalPlayed > 0 ? Math.round((totalCorrect / totalPlayed) * 100) + '%' : '‚Äî';
+    }
 
-        let currentVideoName = "";
+    function playRandomVideo() {
+      const videoElement = document.getElementById("videoPlayer");
+      const randomIndex = Math.floor(Math.random() * videoLinks.length);
+      const chosenLink = videoLinks[randomIndex];
+      currentVideoName = chosenLink.split("/").slice(-1)[0].split("?")[0].split(".")[0];
 
-        function playRandomVideo() {
-            const videoElement = document.getElementById("videoPlayer");
-            const randomIndex = Math.floor(Math.random() * videoLinks.length);
-            const chosenLink = videoLinks[randomIndex];
-            currentVideoName = chosenLink.split("/").slice(-1)[0].split(".")[0];
-            videoElement.src = chosenLink;
-            videoElement.style.display = "block";
-            videoElement.play();
+      videoElement.src = chosenLink;
+      document.getElementById("videoWrapper").classList.add("visible");
+      document.getElementById("answerBox").classList.remove("visible");
+      document.getElementById("feedback").classList.remove("visible", "correct", "incorrect");
+      document.getElementById("answerInput").value = '';
+      document.getElementById("generateButton").style.display = "none";
+      document.getElementById("playAgainButton").style.display = "inline-flex";
+
+      videoElement.play();
+    }
+
+    function afterVideoEnd() {
+      document.getElementById("answerBox").classList.add("visible");
+      document.getElementById("answerInput").focus();
+    }
+
+    function checkAnswer() {
+      const inputVal = document.getElementById("answerInput").value.trim();
+      if (!inputVal) return;
+
+      const feedback = document.getElementById("feedback");
+      totalPlayed++;
+
+      if (inputVal === currentVideoName) {
+        totalCorrect++;
+        feedback.className = "feedback-box visible correct";
+        feedback.innerHTML = '<span class="feedback-icon">üèÜ</span>Correct! Ask the sevak for your special prize.';
+      } else {
+        feedback.className = "feedback-box visible incorrect";
+        feedback.innerHTML = '<span class="feedback-icon">‚úó</span>Not quite ‚Äî the correct answer is Gatha <strong>' + currentVideoName + '</strong>.';
+      }
+
+      updateScoreboard();
+    }
+
+    function resetGame() {
+      document.getElementById("videoWrapper").classList.remove("visible");
+      document.getElementById("answerBox").classList.remove("visible");
+      document.getElementById("feedback").classList.remove("visible", "correct", "incorrect");
+      document.getElementById("answerInput").value = '';
+      document.getElementById("generateButton").style.display = "inline-flex";
+      document.getElementById("playAgainButton").style.display = "none";
+      document.getElementById("videoPlayer").src = "";
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById("answerInput").addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkAnswer();
         }
-
-        function afterVideoEnd() {
-            document.getElementById("answerBox").style.display = "block";
-        }
-
-        function checkAnswer() {
-            const inputVal = document.getElementById("answerInput").value;
-            const feedback = document.getElementById("feedback");
-            if (inputVal === currentVideoName) {
-                feedback.innerHTML = "You got it right! Ask the sevak for your special prize.";
-                document.getElementById('feedback').style.backgroundColor = 'green';
-            } else {
-                feedback.innerHTML = "That's incorrect. The correct answer is: " + currentVideoName + ".";
-                document.getElementById('feedback').style.backgroundColor = 'red';
-            }
-            feedback.style.display = "block";
-        }
-
-        document.getElementById("answerInput").addEventListener('keydown', function(e) {
-            if (e.keyCode === 13) {  // Check if the key pressed is 'Enter'
-                e.preventDefault();  // Prevent the default behavior (form submission, page reload, etc.)
-                checkAnswer();       // Call the checkAnswer function
-            }
-        });
-
-        function resetGame() {
-            document.getElementById("videoPlayer").style.display = "none";
-            document.getElementById("answerBox").style.display = "none";
-            document.getElementById("feedback").style.display = "none";
-            document.getElementById("answerInput").value = '';
-        }
-
-        
-    </script>
+      });
+    });
+  </script>
 
 </body>
-
 </html>
