@@ -148,6 +148,36 @@
       align-self: stretch;
     }
 
+    /* ── Leaderboard button area ── */
+    .lb-trigger-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .btn-lb {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #1b2f5c, #243a72);
+      color: var(--gold-light);
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border: 1px solid rgba(232,184,90,0.35);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-lb:hover {
+      background: linear-gradient(135deg, #243a72, #2d4a8a);
+      border-color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
     /* ── Instruction ── */
     .instruction {
       text-align: center;
@@ -351,58 +381,432 @@
       margin-bottom: 8px;
     }
 
-    /* ── Loading state ── */
-    .loading-hint {
+    /* ══════════════════════════════════════════
+       PLAYER NAME MODAL
+    ══════════════════════════════════════════ */
+    .modal-overlay {
       display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 420px;
       text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-box .modal-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .modal-box h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      color: var(--indigo);
+      margin-bottom: 8px;
+    }
+
+    .modal-box p {
+      font-size: 14px;
       color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-family: 'Lato', sans-serif;
+      border: 2px solid #d1d5db;
+      border-radius: 50px;
+      outline: none;
+      text-align: center;
+      color: var(--indigo);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 16px;
+    }
+
+    .modal-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,148,58,0.18);
+    }
+
+    /* ══════════════════════════════════════════
+       LEADERBOARD PANEL
+    ══════════════════════════════════════════ */
+    .lb-panel-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .lb-panel-overlay.open {
+      display: flex;
+    }
+
+    .lb-panel {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lb-header {
+      background: linear-gradient(135deg, var(--deep-navy), var(--indigo));
+      padding: 24px 28px 20px;
+      text-align: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .lb-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    /* SRMD Flame SVG in header */
+    .lb-flame-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .lb-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+    }
+
+    .lb-header p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1px;
+    }
+
+    .lb-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 20px;
+      line-height: 1;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lb-close:hover {
+      background: rgba(255,255,255,0.22);
+      color: #fff;
+    }
+
+    .lb-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px 24px;
+    }
+
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .lb-table thead th {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      padding: 8px 10px;
+      border-bottom: 2px solid #e5e7eb;
+      text-align: left;
+    }
+
+    .lb-table thead th:last-child,
+    .lb-table thead th:nth-child(3),
+    .lb-table thead th:nth-child(4) {
+      text-align: center;
+    }
+
+    .lb-table tbody tr {
+      transition: background 0.15s;
+    }
+
+    .lb-table tbody tr:hover {
+      background: #f8f5ef;
+    }
+
+    .lb-table tbody tr.current-player {
+      background: linear-gradient(90deg, rgba(201,148,58,0.08), rgba(232,184,90,0.06));
+    }
+
+    .lb-table td {
+      padding: 12px 10px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      color: var(--text-dark);
+      vertical-align: middle;
+    }
+
+    .lb-table td:nth-child(3),
+    .lb-table td:nth-child(4) {
+      text-align: center;
+    }
+
+    .lb-rank {
+      font-family: 'Cinzel', serif;
       font-size: 13px;
-      margin-top: 10px;
+      font-weight: 700;
+      width: 36px;
+      text-align: center;
+    }
+
+    .lb-rank.gold { color: #C9943A; }
+    .lb-rank.silver { color: #9ca3af; }
+    .lb-rank.bronze { color: #B45309; }
+
+    .lb-medal {
+      font-size: 16px;
+    }
+
+    .lb-name {
+      font-weight: 700;
+      color: var(--indigo);
+    }
+
+    .lb-accuracy {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--indigo);
+    }
+
+    .lb-played {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .lb-empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+
+    .lb-empty .lb-empty-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .lb-empty p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .lb-footer-note {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #f8f5ef;
+      border-radius: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .lb-footer-note strong {
+      color: var(--gold);
+    }
+
+    .lb-current-session {
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, rgba(27,47,92,0.06), rgba(201,148,58,0.06));
+      border: 1px solid rgba(201,148,58,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .lb-session-info {
+      font-size: 13px;
+      color: var(--text-dark);
+    }
+
+    .lb-session-info strong {
+      color: var(--indigo);
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+    }
+
+    .lb-session-info .session-name {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .lb-save-btn {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--deep-navy);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .lb-save-btn:hover {
+      box-shadow: 0 4px 16px rgba(201,148,58,0.4);
+      transform: translateY(-1px);
+    }
+
+    .lb-saved-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 14px;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50px;
+      flex-shrink: 0;
     }
 
     /* ── Footer ── */
     footer {
-      background: rgba(255,255,255,0.05);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 20px;
+      background: rgba(0,0,0,0.25);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 28px 20px;
     }
 
     .footer-inner {
       max-width: 680px;
       margin: 0 auto;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 16px;
     }
 
-    .footer-logo {
+    .footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-svg-logo {
+      width: 52px;
+      height: 52px;
       flex-shrink: 0;
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      border-radius: 8px;
-      opacity: 0.9;
+      filter: drop-shadow(0 2px 8px rgba(232,184,90,0.35));
     }
 
-    .footer-text {
-      flex: 1;
-      min-width: 0;
+    .footer-brand {
+      text-align: left;
     }
 
-    .footer-text p {
-      font-size: 12px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.6;
-    }
-
-    .footer-text a {
+    .footer-brand-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--gold-light);
-      text-decoration: none;
-      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.3;
     }
 
-    .footer-text a:hover {
-      text-decoration: underline;
+    .footer-brand-abbr {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .footer-divider {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .footer-links .sep {
+      color: rgba(255,255,255,0.2);
+      font-size: 10px;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.5px;
     }
 
     /* ── Mobile responsiveness ── */
@@ -429,15 +833,109 @@
         max-width: 260px;
       }
 
-      .footer-inner {
+      .lb-panel {
+        max-height: 95vh;
+      }
+
+      .lb-body {
+        padding: 16px 16px 20px;
+      }
+
+      .footer-logo-wrap {
         flex-direction: column;
         text-align: center;
+      }
+
+      .footer-brand {
+        text-align: center;
+      }
+
+      .modal-box {
+        padding: 28px 20px;
       }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Player Name Modal -->
+  <div class="modal-overlay" id="nameModal">
+    <div class="modal-box">
+      <div class="modal-icon">🙏</div>
+      <h2>Welcome!</h2>
+      <p>Enter your name to track your scores on the leaderboard and compete with others.</p>
+      <input
+        type="text"
+        id="nameInput"
+        class="modal-input"
+        placeholder="Your name"
+        maxlength="30"
+        autocomplete="off"
+      >
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="savePlayerName()" style="width:100%;max-width:220px;">
+          Start Playing ▶
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard Panel -->
+  <div class="lb-panel-overlay" id="lbOverlay" onclick="closeLbIfOutside(event)">
+    <div class="lb-panel" id="lbPanel">
+      <div class="lb-header">
+        <button class="lb-close" onclick="closeLeaderboard()">✕</button>
+        <div class="lb-header-top">
+          <!-- Inline SVG SRMD Flame Logo -->
+          <svg class="lb-flame-icon" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="fg1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FFD700"/>
+                <stop offset="35%" stop-color="#E8650A"/>
+                <stop offset="75%" stop-color="#C0392B"/>
+                <stop offset="100%" stop-color="#7B1212"/>
+              </linearGradient>
+              <linearGradient id="fg2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FFF0A0"/>
+                <stop offset="40%" stop-color="#FFB347"/>
+                <stop offset="100%" stop-color="#E8650A"/>
+              </linearGradient>
+              <linearGradient id="fg3" x1="0" y1="0" x2="0.5" y2="1">
+                <stop offset="0%" stop-color="#FFE880"/>
+                <stop offset="100%" stop-color="#FFD700" stop-opacity="0.6"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer flame body -->
+            <path d="M40 4 C27 16, 10 28, 8 50 C6 70, 18 88, 40 96 C62 88, 74 70, 72 50 C70 28, 53 16, 40 4Z" fill="url(#fg1)"/>
+            <!-- Mid flame -->
+            <path d="M40 18 C30 28, 20 38, 20 54 C20 70, 29 82, 40 87 C51 82, 60 70, 60 54 C60 38, 50 28, 40 18Z" fill="url(#fg2)"/>
+            <!-- Inner glow -->
+            <path d="M40 34 C34 40, 30 48, 31 58 C32 66, 36 73, 40 76 C44 73, 48 66, 49 58 C50 48, 46 40, 40 34Z" fill="url(#fg3)"/>
+            <!-- Highlight spark -->
+            <ellipse cx="34" cy="44" rx="4" ry="7" fill="rgba(255,255,220,0.55)" transform="rotate(-15 34 44)"/>
+          </svg>
+          <h2>Hall of Fame</h2>
+        </div>
+        <p>Top 10 Scores · Atmasiddhi Gatha Quiz</p>
+      </div>
+      <div class="lb-body">
+        <!-- Current session bar -->
+        <div class="lb-current-session" id="lbSessionBar">
+          <div class="lb-session-info">
+            <div class="session-name" id="lbSessionName">Playing as —</div>
+            <div>Session: <strong id="lbSessionStats">0/0 &nbsp;·&nbsp; —</strong></div>
+          </div>
+          <button class="lb-save-btn" id="lbSaveBtn" onclick="saveScoreToBoard()">💾 Save Score</button>
+        </div>
+        <!-- Table -->
+        <div id="lbContent"></div>
+        <div class="lb-footer-note">
+          Scores are saved on <strong>this device</strong>. Play at least 3 rounds for your score to qualify.
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Header -->
   <header>
@@ -468,6 +966,13 @@
             <div class="score-value" id="scorePct">—</div>
             <div class="score-label">Accuracy</div>
           </div>
+        </div>
+
+        <!-- Leaderboard trigger -->
+        <div class="lb-trigger-row">
+          <button class="btn-lb" onclick="openLeaderboard()">
+            🏆 &nbsp;View Leaderboard
+          </button>
         </div>
 
         <!-- Instruction & Generate button -->
@@ -518,15 +1023,52 @@
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
-      <img
-        class="footer-logo"
-        src="data:image/png;base64,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�6���v֧����V�wƴtGt���'tSG'V�����e'��g'7t�Cc'46#4�V�����t���ww$V��c#�g�����eT�#��#4d�sFVFWT��7F���56GD6�t��5�v7�$��R�E�����'�&&��Eddu7DDE6dǅs&�$�Sw�$��B�$V�sD���Sf��U'&�����#&T'�����4��dgU�sUf'�U�T���Eg'2�T�6�s4��EB��V�DTb����4#T�$wb�f�%��CvD#s�Gut�WD'gtsf�T$�g&&�t�6�7w2����w��f�V��7�&4�eU��d��6�w��'6�FS�gcd�3Ed�Sc����5��'D����vԦ�7���WF�F3�$6×''5��V&v���SfFU&�FUV��TԖ3�6Ӕף7���v''$���f#�$v��WG'�z2zWFG/b40uhyjRo0aNWrU71n/DyGlapRpsTL4AAAAAElFTkSuQmCC"
-        alt="SRMD Logo"
-      >
-      <div class="footer-text">
-        <p>© 2024 <a href="https://www.srmd.org" target="_blank">Shrimad Rajchandra Mission Dharampur</a>. All rights reserved.</p>
-        <p>Follow: <a href="https://www.facebook.com/shrimadrajchandramissiondharampur/" target="_blank">Facebook</a> &nbsp;|&nbsp; <a href="https://www.instagram.com/srmdharampur/" target="_blank">Instagram</a></p>
+
+      <!-- Logo + Brand -->
+      <div class="footer-logo-wrap">
+        <!-- SRMD Flame SVG Logo -->
+        <svg class="footer-svg-logo" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ffg1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFD700"/>
+              <stop offset="35%" stop-color="#E8650A"/>
+              <stop offset="75%" stop-color="#C0392B"/>
+              <stop offset="100%" stop-color="#7B1212"/>
+            </linearGradient>
+            <linearGradient id="ffg2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFF0A0"/>
+              <stop offset="40%" stop-color="#FFB347"/>
+              <stop offset="100%" stop-color="#E8650A"/>
+            </linearGradient>
+            <linearGradient id="ffg3" x1="0" y1="0" x2="0.5" y2="1">
+              <stop offset="0%" stop-color="#FFE880"/>
+              <stop offset="100%" stop-color="#FFD700" stop-opacity="0.6"/>
+            </linearGradient>
+          </defs>
+          <path d="M40 4 C27 16, 10 28, 8 50 C6 70, 18 88, 40 96 C62 88, 74 70, 72 50 C70 28, 53 16, 40 4Z" fill="url(#ffg1)"/>
+          <path d="M40 18 C30 28, 20 38, 20 54 C20 70, 29 82, 40 87 C51 82, 60 70, 60 54 C60 38, 50 28, 40 18Z" fill="url(#ffg2)"/>
+          <path d="M40 34 C34 40, 30 48, 31 58 C32 66, 36 73, 40 76 C44 73, 48 66, 49 58 C50 48, 46 40, 40 34Z" fill="url(#ffg3)"/>
+          <ellipse cx="34" cy="44" rx="4" ry="7" fill="rgba(255,255,220,0.55)" transform="rotate(-15 34 44)"/>
+        </svg>
+        <div class="footer-brand">
+          <div class="footer-brand-name">Shrimad Rajchandra<br>Mission Dharampur</div>
+          <div class="footer-brand-abbr">SRMD</div>
+        </div>
       </div>
+
+      <div class="footer-divider"></div>
+
+      <!-- Links -->
+      <div class="footer-links">
+        <a href="https://www.srmd.org" target="_blank">srmd.org</a>
+        <span class="sep">•</span>
+        <a href="https://www.facebook.com/shrimadrajchandramissiondharampur/" target="_blank">Facebook</a>
+        <span class="sep">•</span>
+        <a href="https://www.instagram.com/srmdharampur/" target="_blank">Instagram</a>
+      </div>
+
+      <div class="footer-copy">© 2024 Shrimad Rajchandra Mission Dharampur. All rights reserved.</div>
+
     </div>
   </footer>
 
@@ -544,7 +1086,7 @@
       "https://dl.dropboxusercontent.com/scl/fi/mq2f8pkck1omjuaojgb5x/6.mp4?rlkey=zss7drbie5udhuji8twangdhw&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/h63yucs2olhr5jlkc8apz/54.mp4?rlkey=3ylv42hp6ygl7od4c55y1vvie&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/84i6276pzex9onk187yf9/141.mp4?rlkey=nj9x5th4tfpo9mwwy3lgx7bym&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/6kb8o5jo0ttd8cdxlh2sf/83.mp4?rlkey=h0xft6yg2cncurj88ks06xorc&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/6kb8o5jo0ttd8cdxlh2sf/83.mp4?rlkey=h0xft6ygmcncurj88ks06xorc&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/3ppt8yu3vp7c6mmprp8lv/97.mp4?rlkey=e9uodvg9ldzjg1e9zg37395dn&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/voql9fmk6no37ju6nakwe/81.mp4?rlkey=p0emsic7yj21qz3o3u76lz0gn&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/wu1oeylv2ntlubew4tovj/95.mp4?rlkey=u6brk1dh2ej2p4qjvkha698bt&dl=0",
@@ -612,13 +1154,13 @@
       "https://dl.dropboxusercontent.com/scl/fi/rjf0gyoaem3omcilefqsc/126.mp4?rlkey=rb6pmr3b1jpdb3t5m8ey3q348&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/kflgqf5zdrrnxxbi8gfoe/33.mp4?rlkey=7w0xb2gj8e8t6au4s2183uz9l&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/qc4sodgi2nsmx7lo4272i/27.mp4?rlkey=963hg1xowxpfjpmstv7h1w2s5&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/2htw2vgzbzimptlf7fxls/26.mp4?rlkey=hcy79gs01sq5o5c29rraqt7b7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/2htw2vgzbzimptlf7fxls/26.mp4?rlkey=hsy79gs01sq5o5c29rraqt7b7&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/wxy5krvjz36azmo08tu81/32.mp4?rlkey=888qiptedth20q17ddzujvk4s&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/kgdc5lbspcgg7ul424anc/127.mp4?rlkey=m61emvmnwa99o4kunysp71hz2&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/53xvi5w2hgpqyj05gw49/133.mp4?rlkey=nf9mqpkcd85gkcszac8vneiur&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/430xbv2i20uc00j67ghhj/116.mp4?rlkey=szxkoshev2twwwsthm73yv6cw&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/53xvik5w2hgpqyj05gw49/133.mp4?rlkey=nf9mqpkcd85gkcszac8vneiur&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/430xbv2i20uc00j67ghhj/116.mp4?rlkey=szxjishev2twwwsthm73yv6hw&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/lg2cmcmce0056u0g006nf/102.mp4?rlkey=q3g90js18d19ks664dmlhx166&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/t50xzti4a5tvlv0tab0vh/17.mp4?rlkey=4v91rwdewkk09c4r1v0hjw(ocv&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/t50xzti4a5tvlv0tab0vh/17.mp4?rlkey=4v91rwdewkk09c4r1v0hjqocv&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/j4xdsl82hy314fvyynixd/16.mp4?rlkey=mn7jrk27cll5z4wmj62tkouvq&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/oeem7x2xguyojozzqcio2/103.mp4?rlkey=ycz0k385ry8mkzwzsjdu8e00k&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/vef6vlke2fnughg0xersr/117.mp4?rlkey=n5rf1x104r2ipih3qjd36uqqv&dl=0",
@@ -626,34 +1168,34 @@
       "https://dl.dropboxusercontent.com/scl/fi/x47i0j3940pjdogpvgu1g/101.mp4?rlkey=gdhew4ubgip75qwxyhpkvtzou&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/z7q9zwclemuu8cw2q96jf/115.mp4?rlkey=ncel720wodqrw99v4602yfea4&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/4fe0bbgyf7t6snmv8xu3s/14.mp4?rlkey=ejnzaao101hm3v5ne9g6804ke&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/4kroyanoocc9ya8ds7mkz/28.mp4?rlkey=7ziei44uhe0w6z2das9e4y2ru&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4kroyanoocc9ya8ds7mkz/28.mp4?rlkey=7ziyi44uhe0w6z2das9e4y2ru&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/3xjfnroeqqt3y95l3bvow/29.mp4?rlkey=bdhun3r5tpuqrmlr4oakry4ad&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/plt3ehsitoe0h2fiy39u8/15.mp4?rlkey=xypvgj9cq41d4nk3dgmty89mn&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/bx6dq1bmnyzg0jznzoor4/114.mp4?rlkey=g8wlf0qtkytnv5ojpqok0pyya&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/wz7bh9t6byrggkrp07646/100.mp4?rlkey=b4y8107djm76c02lywgxd701x&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/zda8w818eatvy5aj3he4e/128.mp4?rlkey=1hd7titnlysbjhbe0niyy9p4a&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/p3tcptkq5dadgsq3ubn9h/104.mp4?rlkey=32hf8dlm4xukhr7j5w5nngrr0&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/s9'xqwmgjhrr3nsx7uz8b/110.mp4?rlkey=hjxbm8tsw45mrij20n591t85o&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/s3tcptkq5dadgsq3ubn9h/104.mp4?rlkey=32hf8dlm4xukhr7j5w5nngrr0&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/s97xqwmgjhrr3nsx7uz8b/110.mp4?rlkey=hjxbm8tsw45mrij20n591t85o&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/a0u1le61rfyy0my19m7e0/138.mp4?rlkey=2ml03d7nn219qw5h4g0qdp256&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/qwuj01c8c2yudiukt17gl/39.mp4?rlkey=5lf0qd5m0285zjsgwd1v2nzqs&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/85a1z6dr0016tyo0igdcv/11.mp4?rlkey=t3x1cvj1w6wplrc3ts4z0dkcg&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunkve5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunke5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/03agnnbspqi9ov5fooxd7/38.mp4?rlkey=ztdhf1tmys9ymfmwd6gzolu6y&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/42xfv48weklmi99c9a7yf/139.mp4?rlkey=ifzul29a8wacf9y05mm71sruq&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/ecrbhcgsylx72bfj1hk0r/111.mp4?rlkey=ozyy8bpm5joq6tvjg1msdhaoi&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/inkygndq0t25uei36p3w4/105.mp4?rlkey=qutac7v4drbnqw3f0fenjauyv&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/e4epd3y86tc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/e4epd3y8gtc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/24d66pxmu8dfkmh1x56r2/107.mp4?rlkey=karvuipp52n9y8uialyafpwzl&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/erwnwe3y0cgmrp1xo3anj/12.mp4?rlkey=41qw6tet35b4sjqbujmnerj2p&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/up0hpdp0511w9a7t6mtbn/13.mp4?rlkey=18ng2xqjzm6hgl6xt0f9ekrbi&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/82966sukq0xafar9z59mg/106.mp4?rlkey=mswzk8a54j8b7xdhecdyne0tx&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/18mcgvjmb9svefwkk238g/112.mp4?rlkey=7oqzewa2e0yjmrmf93efgegjn&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/2rwipg3rzsgltkzuz198q/74.mp4?rlkey=8zbjf3sl6sfr0cpj5w9nybwri&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/bdqdgn5ge5twrpq14ac6v/60.mp4?rlkey=b6k14td9g1vzbl9oqplsx8h8t&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bdqdgn9ge5twrpq14ac6v/60.mp4?rlkey=b6k14td9g1vzbl9oqplsx8h8t&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/6ueokb463cubvearmt5l6/48.mp4?rlkey=6w2hrs3aw4y108xtm23o1ox49&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/i3zjxlcm6ffxso53akuag/49.mp4?rlkey=wg0m73hzemvxw6ng4crimruh4&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/fmf85dwezywjk8iujgwfh/61.mp4?rlkey=i992x4mzb32t9voe64gsrl7rg&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjjo6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjho6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/ss48ycyetsnv1dxe8452f/88.mp4?rlkey=u7mbt4urupdq9k5dk53r2baxc&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/oopb3a5nt7zhpiq730dit/63.mp4?rlkey=ssvalann7ys47k87d2ek8ylcf&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/3152t1px1gpy3zjm8iiml/77.mp4?rlkey=46ysmsnpr6nrkstv6z0xbr9dw&dl=0",
@@ -662,7 +1204,7 @@
       "https://dl.dropboxusercontent.com/scl/fi/159prnlj1jb7gck2boiwj/89.mp4?rlkey=zd8wtusj7dd5s4pnfitsfsmsy&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/4eqjnrxhj6c276mec0aic/99.mp4?rlkey=5t7z8n2gbkrd6aa5v8i90izb7&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/qhj77ibc1fjg8f6w3q9fz/8.mp4?rlkey=dp15fzliqmwot42fi2m16n495&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bih1y1jttr&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bihx1y1jttr&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/34hof02k5cv5xmwvpwybc/72.mp4?rlkey=g4odigc8svnzv0wfljztp572e&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/8l1qhcf5ean8btr5qx6qr/73.mp4?rlkey=fjftd2tv8wvylv0z50a3aw79x&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/9thre813uyj2go71cuske/67.mp4?rlkey=a8tyr989w2hpy5jw18xu1fzb8&dl=0",
@@ -676,10 +1218,183 @@
       "https://dl.dropboxusercontent.com/scl/fi/o9o0dt57ltfkvtn43vwd6/58.mp4?rlkey=8in6rg59816pmyc7jrapoy7gc&dl=0"
     ];
 
+    /* ══════════════════════════════════════════
+       STATE
+    ══════════════════════════════════════════ */
     let currentVideoName = "";
     let totalPlayed = 0;
     let totalCorrect = 0;
+    let playerName = localStorage.getItem('atmasiddhi_player') || null;
+    let scoreSavedThisSession = false;
 
+    const LB_KEY = 'atmasiddhi_leaderboard';
+
+    /* ══════════════════════════════════════════
+       LEADERBOARD DATA HELPERS
+    ══════════════════════════════════════════ */
+    function getLeaderboard() {
+      try {
+        return JSON.parse(localStorage.getItem(LB_KEY) || '[]');
+      } catch(e) { return []; }
+    }
+
+    function saveToLeaderboard(name, correct, played) {
+      if (!name || played < 3) return false;
+      const accuracy = Math.round((correct / played) * 100);
+      const lb = getLeaderboard();
+      const idx = lb.findIndex(e => e.name.toLowerCase() === name.toLowerCase());
+
+      if (idx >= 0) {
+        const prev = lb[idx];
+        const isBetter = accuracy > prev.accuracy || (accuracy === prev.accuracy && played > prev.played);
+        if (isBetter) {
+          lb[idx] = { name, correct, played, accuracy, date: new Date().toLocaleDateString() };
+        } else {
+          // Accumulate totals
+          lb[idx].correct += correct;
+          lb[idx].played += played;
+          lb[idx].accuracy = Math.round((lb[idx].correct / lb[idx].played) * 100);
+          lb[idx].date = new Date().toLocaleDateString();
+        }
+      } else {
+        lb.push({ name, correct, played, accuracy, date: new Date().toLocaleDateString() });
+      }
+
+      lb.sort((a, b) => b.accuracy - a.accuracy || b.played - a.played);
+      lb.splice(20);
+      localStorage.setItem(LB_KEY, JSON.stringify(lb));
+      return true;
+    }
+
+    /* ══════════════════════════════════════════
+       PLAYER NAME MODAL
+    ══════════════════════════════════════════ */
+    function showNameModal() {
+      document.getElementById('nameModal').classList.add('open');
+      setTimeout(() => document.getElementById('nameInput').focus(), 100);
+    }
+
+    function savePlayerName() {
+      const input = document.getElementById('nameInput').value.trim();
+      if (!input) {
+        document.getElementById('nameInput').focus();
+        document.getElementById('nameInput').style.borderColor = '#ef4444';
+        return;
+      }
+      playerName = input;
+      localStorage.setItem('atmasiddhi_player', playerName);
+      document.getElementById('nameModal').classList.remove('open');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!playerName) {
+        showNameModal();
+      }
+
+      document.getElementById('nameInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') savePlayerName();
+        else this.style.borderColor = '';
+      });
+
+      document.getElementById('answerInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkAnswer();
+        }
+      });
+    });
+
+    /* ══════════════════════════════════════════
+       LEADERBOARD UI
+    ══════════════════════════════════════════ */
+    function openLeaderboard() {
+      renderLeaderboard();
+      document.getElementById('lbOverlay').classList.add('open');
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('lbOverlay').classList.remove('open');
+    }
+
+    function closeLbIfOutside(e) {
+      if (e.target === document.getElementById('lbOverlay')) closeLeaderboard();
+    }
+
+    function saveScoreToBoard() {
+      if (!playerName) { showNameModal(); return; }
+      if (totalPlayed < 3) {
+        alert('Play at least 3 rounds before saving your score!');
+        return;
+      }
+      saveToLeaderboard(playerName, totalCorrect, totalPlayed);
+      scoreSavedThisSession = true;
+      renderLeaderboard();
+      // Swap save button to badge
+      const btn = document.getElementById('lbSaveBtn');
+      btn.outerHTML = '<span class="lb-saved-badge" id="lbSaveBtn">✓ Saved!</span>';
+    }
+
+    function renderLeaderboard() {
+      // Session bar
+      document.getElementById('lbSessionName').textContent =
+        'Playing as ' + (playerName || '—');
+      const pct = totalPlayed > 0
+        ? Math.round((totalCorrect / totalPlayed) * 100) + '%'
+        : '—';
+      document.getElementById('lbSessionStats').textContent =
+        totalCorrect + '/' + totalPlayed + ' \u00b7 ' + pct;
+
+      // Render table
+      const lb = getLeaderboard();
+      const container = document.getElementById('lbContent');
+
+      if (lb.length === 0) {
+        container.innerHTML = `
+          <div class="lb-empty">
+            <span class="lb-empty-icon">🏆</span>
+            <p>No scores yet. Play at least 3 rounds, then save your score to be the first on the board!</p>
+          </div>`;
+        return;
+      }
+
+      const top10 = lb.slice(0, 10);
+      const medals = ['🥇','🥈','🥉'];
+      const rankClasses = ['gold','silver','bronze'];
+
+      let rows = top10.map((entry, i) => {
+        const isMe = playerName && entry.name.toLowerCase() === playerName.toLowerCase();
+        const medal = i < 3 ? `<span class="lb-medal">${medals[i]}</span>` : '';
+        const rankClass = i < 3 ? rankClasses[i] : '';
+        return `
+          <tr class="${isMe ? 'current-player' : ''}">
+            <td><span class="lb-rank ${rankClass}">${medal || (i + 1)}</span></td>
+            <td><span class="lb-name">${escHtml(entry.name)}${isMe ? ' <small style="color:var(--gold);font-size:10px;">(you)</small>' : ''}</span></td>
+            <td><span class="lb-accuracy">${entry.accuracy}%</span></td>
+            <td><span class="lb-played">${entry.correct}/${entry.played}</span></td>
+          </tr>`;
+      }).join('');
+
+      container.innerHTML = `
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Accuracy</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ══════════════════════════════════════════
+       SCOREBOARD
+    ══════════════════════════════════════════ */
     function updateScoreboard() {
       document.getElementById('scoreCorrect').textContent = totalCorrect;
       document.getElementById('scoreTotal').textContent = totalPlayed;
@@ -687,6 +1402,9 @@
         totalPlayed > 0 ? Math.round((totalCorrect / totalPlayed) * 100) + '%' : '—';
     }
 
+    /* ══════════════════════════════════════════
+       GAME LOGIC
+    ══════════════════════════════════════════ */
     function playRandomVideo() {
       const videoElement = document.getElementById("videoPlayer");
       const randomIndex = Math.floor(Math.random() * videoLinks.length);
@@ -715,17 +1433,24 @@
 
       const feedback = document.getElementById("feedback");
       totalPlayed++;
+      scoreSavedThisSession = false;
 
       if (inputVal === currentVideoName) {
         totalCorrect++;
         feedback.className = "feedback-box visible correct";
-        feedback.innerHTML = '<span class="feedback-icon">🏆</span>Correct! Ask the sevak for your special prize.';
+        feedback.innerHTML = '<span class="feedback-icon">🏆</span>Correct! Jai Satchitanand!';
       } else {
         feedback.className = "feedback-box visible incorrect";
         feedback.innerHTML = '<span class="feedback-icon">✗</span>Not quite — the correct answer is Gatha <strong>' + currentVideoName + '</strong>.';
       }
 
       updateScoreboard();
+
+      // Auto-save to leaderboard after 3+ rounds
+      if (totalPlayed >= 3 && playerName && !scoreSavedThisSession) {
+        saveToLeaderboard(playerName, totalCorrect, totalPlayed);
+        scoreSavedThisSession = true;
+      }
     }
 
     function resetGame() {
@@ -737,15 +1462,6 @@
       document.getElementById("playAgainButton").style.display = "none";
       document.getElementById("videoPlayer").src = "";
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById("answerInput").addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          checkAnswer();
-        }
-      });
-    });
   </script>
 
 </body>
