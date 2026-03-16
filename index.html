@@ -382,58 +382,43 @@
     }
 
     /* ══════════════════════════════════════════
-       PLAYER NAME MODAL
+       JOIN LEADERBOARD SECTION (inline, non-intrusive)
     ══════════════════════════════════════════ */
-    .modal-overlay {
+    .join-lb-section {
       display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      backdrop-filter: blur(4px);
+      margin-top: 18px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, rgba(27,47,92,0.05), rgba(201,148,58,0.05));
+      border: 1px solid rgba(201,148,58,0.25);
+      border-radius: 14px;
+      animation: fadeIn 0.5s ease;
     }
 
-    .modal-overlay.open {
-      display: flex;
+    .join-lb-section.visible {
+      display: block;
     }
 
-    .modal-box {
-      background: #fff;
-      border-radius: 20px;
-      padding: 36px 32px;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-      animation: fadeIn 0.3s ease;
-    }
-
-    .modal-box .modal-icon {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .modal-box h2 {
-      font-family: 'Cinzel', serif;
-      font-size: 22px;
-      color: var(--indigo);
-      margin-bottom: 8px;
-    }
-
-    .modal-box p {
-      font-size: 14px;
+    .join-lb-prompt {
+      font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 24px;
-      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 10px;
     }
 
-    .modal-input {
-      width: 100%;
-      padding: 14px 20px;
-      font-size: 16px;
+    .join-lb-prompt strong {
+      color: var(--indigo);
+    }
+
+    .join-lb-form {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .join-lb-input {
+      padding: 10px 16px;
+      font-size: 14px;
       font-family: 'Lato', sans-serif;
       border: 2px solid #d1d5db;
       border-radius: 50px;
@@ -441,12 +426,42 @@
       text-align: center;
       color: var(--indigo);
       transition: border-color 0.2s, box-shadow 0.2s;
-      margin-bottom: 16px;
+      width: 180px;
     }
 
-    .modal-input:focus {
+    .join-lb-input:focus {
       border-color: var(--gold);
       box-shadow: 0 0 0 3px rgba(201,148,58,0.18);
+    }
+
+    .join-lb-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--deep-navy);
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .join-lb-btn:hover {
+      box-shadow: 0 4px 14px rgba(201,148,58,0.4);
+      transform: translateY(-1px);
+    }
+
+    .join-lb-status {
+      display: none;
+      text-align: center;
+      font-size: 13px;
+      color: #065f46;
+      background: #d1fae5;
+      border-radius: 50px;
+      padding: 8px 16px;
     }
 
     /* ══════════════════════════════════════════
@@ -497,11 +512,13 @@
       margin-bottom: 6px;
     }
 
-    /* SRMD Flame SVG in header */
-    .lb-flame-icon {
-      width: 32px;
-      height: 32px;
+    /* SRMD logo in leaderboard header */
+    .lb-logo-icon {
+      width: 36px;
+      height: 36px;
       flex-shrink: 0;
+      object-fit: contain;
+      filter: brightness(1.2);
     }
 
     .lb-header h2 {
@@ -547,6 +564,28 @@
       padding: 20px 24px 24px;
     }
 
+    .lb-loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .lb-loading .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border: 3px solid #e5e7eb;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .lb-table {
       width: 100%;
       border-collapse: collapse;
@@ -564,8 +603,7 @@
     }
 
     .lb-table thead th:last-child,
-    .lb-table thead th:nth-child(3),
-    .lb-table thead th:nth-child(4) {
+    .lb-table thead th:nth-child(3) {
       text-align: center;
     }
 
@@ -589,8 +627,7 @@
       vertical-align: middle;
     }
 
-    .lb-table td:nth-child(3),
-    .lb-table td:nth-child(4) {
+    .lb-table td:nth-child(3) {
       text-align: center;
     }
 
@@ -660,68 +697,6 @@
       color: var(--gold);
     }
 
-    .lb-current-session {
-      margin-bottom: 16px;
-      padding: 14px 18px;
-      background: linear-gradient(135deg, rgba(27,47,92,0.06), rgba(201,148,58,0.06));
-      border: 1px solid rgba(201,148,58,0.2);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .lb-session-info {
-      font-size: 13px;
-      color: var(--text-dark);
-    }
-
-    .lb-session-info strong {
-      color: var(--indigo);
-      font-family: 'Cinzel', serif;
-      font-size: 14px;
-    }
-
-    .lb-session-info .session-name {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .lb-save-btn {
-      padding: 8px 18px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: var(--deep-navy);
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .lb-save-btn:hover {
-      box-shadow: 0 4px 16px rgba(201,148,58,0.4);
-      transform: translateY(-1px);
-    }
-
-    .lb-saved-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 8px 14px;
-      background: #d1fae5;
-      color: #065f46;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 50px;
-      flex-shrink: 0;
-    }
-
     /* ── Footer ── */
     footer {
       background: rgba(0,0,0,0.25);
@@ -744,11 +719,12 @@
       gap: 14px;
     }
 
-    .footer-svg-logo {
-      width: 52px;
-      height: 52px;
+    .footer-srmd-logo {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
       flex-shrink: 0;
-      filter: drop-shadow(0 2px 8px rgba(232,184,90,0.35));
+      filter: drop-shadow(0 2px 8px rgba(232,184,90,0.3));
     }
 
     .footer-brand {
@@ -850,8 +826,9 @@
         text-align: center;
       }
 
-      .modal-box {
-        padding: 28px 20px;
+      .join-lb-form {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
@@ -859,79 +836,29 @@
 
 <body>
 
-  <!-- Player Name Modal -->
-  <div class="modal-overlay" id="nameModal">
-    <div class="modal-box">
-      <div class="modal-icon">🙏</div>
-      <h2>Welcome!</h2>
-      <p>Enter your name to track your scores on the leaderboard and compete with others.</p>
-      <input
-        type="text"
-        id="nameInput"
-        class="modal-input"
-        placeholder="Your name"
-        maxlength="30"
-        autocomplete="off"
-      >
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="savePlayerName()" style="width:100%;max-width:220px;">
-          Start Playing ▶
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Leaderboard Panel -->
   <div class="lb-panel-overlay" id="lbOverlay" onclick="closeLbIfOutside(event)">
     <div class="lb-panel" id="lbPanel">
       <div class="lb-header">
         <button class="lb-close" onclick="closeLeaderboard()">✕</button>
         <div class="lb-header-top">
-          <!-- Inline SVG SRMD Flame Logo -->
-          <svg class="lb-flame-icon" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="fg1" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFD700"/>
-                <stop offset="35%" stop-color="#E8650A"/>
-                <stop offset="75%" stop-color="#C0392B"/>
-                <stop offset="100%" stop-color="#7B1212"/>
-              </linearGradient>
-              <linearGradient id="fg2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFF0A0"/>
-                <stop offset="40%" stop-color="#FFB347"/>
-                <stop offset="100%" stop-color="#E8650A"/>
-              </linearGradient>
-              <linearGradient id="fg3" x1="0" y1="0" x2="0.5" y2="1">
-                <stop offset="0%" stop-color="#FFE880"/>
-                <stop offset="100%" stop-color="#FFD700" stop-opacity="0.6"/>
-              </linearGradient>
-            </defs>
-            <!-- Outer flame body -->
-            <path d="M40 4 C27 16, 10 28, 8 50 C6 70, 18 88, 40 96 C62 88, 74 70, 72 50 C70 28, 53 16, 40 4Z" fill="url(#fg1)"/>
-            <!-- Mid flame -->
-            <path d="M40 18 C30 28, 20 38, 20 54 C20 70, 29 82, 40 87 C51 82, 60 70, 60 54 C60 38, 50 28, 40 18Z" fill="url(#fg2)"/>
-            <!-- Inner glow -->
-            <path d="M40 34 C34 40, 30 48, 31 58 C32 66, 36 73, 40 76 C44 73, 48 66, 49 58 C50 48, 46 40, 40 34Z" fill="url(#fg3)"/>
-            <!-- Highlight spark -->
-            <ellipse cx="34" cy="44" rx="4" ry="7" fill="rgba(255,255,220,0.55)" transform="rotate(-15 34 44)"/>
-          </svg>
+          <img
+            class="lb-logo-icon"
+            src="https://d3fzplfbemxxxv.cloudfront.net/srmd/wp-content/uploads/2019/09/06090806/mission_logo.svg"
+            alt="SRMD"
+          >
           <h2>Hall of Fame</h2>
         </div>
-        <p>Top 10 Scores · Atmasiddhi Gatha Quiz</p>
+        <p>Global Top 10 · Atmasiddhi Gatha Quiz</p>
       </div>
       <div class="lb-body">
-        <!-- Current session bar -->
-        <div class="lb-current-session" id="lbSessionBar">
-          <div class="lb-session-info">
-            <div class="session-name" id="lbSessionName">Playing as —</div>
-            <div>Session: <strong id="lbSessionStats">0/0 &nbsp;·&nbsp; —</strong></div>
+        <div id="lbContent">
+          <div class="lb-loading">
+            <div class="spinner"></div><br>Loading leaderboard…
           </div>
-          <button class="lb-save-btn" id="lbSaveBtn" onclick="saveScoreToBoard()">💾 Save Score</button>
         </div>
-        <!-- Table -->
-        <div id="lbContent"></div>
         <div class="lb-footer-note">
-          Scores are saved on <strong>this device</strong>. Play at least 3 rounds for your score to qualify.
+          Scores are <strong>shared globally</strong> — compete with players worldwide!
         </div>
       </div>
     </div>
@@ -1016,6 +943,23 @@
         <!-- Feedback -->
         <div class="feedback-box" id="feedback"></div>
 
+        <!-- Join Leaderboard section — shown after first answer, non-intrusive -->
+        <div class="join-lb-section" id="joinLbSection">
+          <p class="join-lb-prompt">🏆 Want to appear on the <strong>shared leaderboard</strong>?</p>
+          <div class="join-lb-form" id="joinLbForm">
+            <input
+              type="text"
+              id="lbNameInput"
+              class="join-lb-input"
+              placeholder="Your name"
+              maxlength="30"
+              autocomplete="off"
+            >
+            <button class="join-lb-btn" onclick="joinLeaderboard()">Join Board</button>
+          </div>
+          <div class="join-lb-status" id="joinLbStatus"></div>
+        </div>
+
       </div><!-- /card-inner -->
     </div><!-- /card -->
   </div><!-- /main-wrapper -->
@@ -1024,32 +968,13 @@
   <footer>
     <div class="footer-inner">
 
-      <!-- Logo + Brand -->
+      <!-- Official SRMD Logo + Brand -->
       <div class="footer-logo-wrap">
-        <!-- SRMD Flame SVG Logo -->
-        <svg class="footer-svg-logo" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="ffg1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#FFD700"/>
-              <stop offset="35%" stop-color="#E8650A"/>
-              <stop offset="75%" stop-color="#C0392B"/>
-              <stop offset="100%" stop-color="#7B1212"/>
-            </linearGradient>
-            <linearGradient id="ffg2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#FFF0A0"/>
-              <stop offset="40%" stop-color="#FFB347"/>
-              <stop offset="100%" stop-color="#E8650A"/>
-            </linearGradient>
-            <linearGradient id="ffg3" x1="0" y1="0" x2="0.5" y2="1">
-              <stop offset="0%" stop-color="#FFE880"/>
-              <stop offset="100%" stop-color="#FFD700" stop-opacity="0.6"/>
-            </linearGradient>
-          </defs>
-          <path d="M40 4 C27 16, 10 28, 8 50 C6 70, 18 88, 40 96 C62 88, 74 70, 72 50 C70 28, 53 16, 40 4Z" fill="url(#ffg1)"/>
-          <path d="M40 18 C30 28, 20 38, 20 54 C20 70, 29 82, 40 87 C51 82, 60 70, 60 54 C60 38, 50 28, 40 18Z" fill="url(#ffg2)"/>
-          <path d="M40 34 C34 40, 30 48, 31 58 C32 66, 36 73, 40 76 C44 73, 48 66, 49 58 C50 48, 46 40, 40 34Z" fill="url(#ffg3)"/>
-          <ellipse cx="34" cy="44" rx="4" ry="7" fill="rgba(255,255,220,0.55)" transform="rotate(-15 34 44)"/>
-        </svg>
+        <img
+          class="footer-srmd-logo"
+          src="https://d3fzplfbemxxxv.cloudfront.net/srmd/wp-content/uploads/2019/09/06090806/mission_logo.svg"
+          alt="Shrimad Rajchandra Mission Dharampur"
+        >
         <div class="footer-brand">
           <div class="footer-brand-name">Shrimad Rajchandra<br>Mission Dharampur</div>
           <div class="footer-brand-abbr">SRMD</div>
@@ -1077,7 +1002,7 @@
       "https://dl.dropboxusercontent.com/scl/fi/zqmfq0pl1ebymyjbeboou/96.mp4?rlkey=fir28noh6ycsvt4ki35pde3a8&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/pqkmk942goyf3n4vkbgoo/82.mp4?rlkey=zuxr9xx6yk74bof7gkjx4wiun&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/0d4kl67k8ncz19i9wx9bm/140.mp4?rlkey=k2iyit395nlq3fg3xfrwa000u&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/fmzkidjjgt742rapnp9to/7.mp4?rlkey=7jxkykt5r4sn5gajj1a4yxasj&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/fmzkidjjgt742rapnp9to/7.mp4?rlkey=7jkykt5r4sn5gajj1a4yxasj&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/u0lvokbb7c817u643n4sh/55.mp4?rlkey=cwm4pjs4wxhv475lgpvwi94uu&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/5ra1m2cqejtyu0l5g6bhn/41.mp4?rlkey=o91e8kejvk3xn8znx5t6n31f7&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/e428ips3goi80ubn6zbty/69.mp4?rlkey=3c6kkvlqeo4vf8wu4kbh79tqz&dl=0",
@@ -1179,12 +1104,12 @@
       "https://dl.dropboxusercontent.com/scl/fi/a0u1le61rfyy0my19m7e0/138.mp4?rlkey=2ml03d7nn219qw5h4g0qdp256&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/qwuj01c8c2yudiukt17gl/39.mp4?rlkey=5lf0qd5m0285zjsgwd1v2nzqs&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/85a1z6dr0016tyo0igdcv/11.mp4?rlkey=t3x1cvj1w6wplrc3ts4z0dkcg&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunke5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/bk9ibwnlunkve5mbf1ymo/10.mp4?rlkey=jitt01l676q4hq607ybji5sny&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/03agnnbspqi9ov5fooxd7/38.mp4?rlkey=ztdhf1tmys9ymfmwd6gzolu6y&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/42xfv48weklmi99c9a7yf/139.mp4?rlkey=ifzul29a8wacf9y05mm71sruq&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/ecrbhcgsylx72bfj1hk0r/111.mp4?rlkey=ozyy8bpm5joq6tvjg1msdhaoi&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/inkygndq0t25uei36p3w4/105.mp4?rlkey=qutac7v4drbnqw3f0fenjauyv&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/e4epd3y8gtc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/e4epd3y86tc47w8ged1sk/113.mp4?rlkey=6wcea7ymzxhof2kj7h2uvobqa&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/24d66pxmu8dfkmh1x56r2/107.mp4?rlkey=karvuipp52n9y8uialyafpwzl&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/erwnwe3y0cgmrp1xo3anj/12.mp4?rlkey=41qw6tet35b4sjqbujmnerj2p&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/up0hpdp0511w9a7t6mtbn/13.mp4?rlkey=18ng2xqjzm6hgl6xt0f9ekrbi&dl=0",
@@ -1195,16 +1120,16 @@
       "https://dl.dropboxusercontent.com/scl/fi/6ueokb463cubvearmt5l6/48.mp4?rlkey=6w2hrs3aw4y108xtm23o1ox49&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/i3zjxlcm6ffxso53akuag/49.mp4?rlkey=wg0m73hzemvxw6ng4crimruh4&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/fmf85dwezywjk8iujgwfh/61.mp4?rlkey=i992x4mzb32t9voe64gsrl7rg&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjho6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/q5e180cpwsjjo6dkunbue/75.mp4?rlkey=7ihu4ulnnlgywrgh848e69hi8&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/ss48ycyetsnv1dxe8452f/88.mp4?rlkey=u7mbt4urupdq9k5dk53r2baxc&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/oopb3a5nt7zhpiq730dit/63.mp4?rlkey=ssvalann7ys47k87d2ek8ylcf&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/3152t1px1gpy3zjm8iiml/77.mp4?rlkey=46ysmsnpr6nrkstv6z0xbr9dw&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/5a5usekiqcr76o4fj3m2h/76.mp4?rlkey=nnytlpxfryjy1tzuvszo37pvs&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/z5pihn49byw65ry5vtom5/62.mp4?rlkey=heo5vpi1psvpja9hb69y0rddn&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/159prnlj1jb7gck2boiwj/89.mp4?rlkey=zd8wtusj7dd5s4pnfitsfsmsy&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/4eqjnrxhj6c276mec0aic/99.mp4?rlkey=5t7z8n2gbkrd6aa5v8i90izb7&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/4eqjnrxhj6c276mec0aic/99.mp4?rlkey=1t7z8n2gbkrd6aa5v8i90izb7&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/qhj77ibc1fjg8f6w3q9fz/8.mp4?rlkey=dp15fzliqmwot42fi2m16n495&dl=0",
-      "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bihx1y1jttr&dl=0",
+      "https://dl.dropboxusercontent.com/scl/fi/qb0oru0dv00kn0o1axud2/66.mp4?rlkey=85xpjpn4arnek21bih1y1jttr&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/34hof02k5cv5xmwvpwybc/72.mp4?rlkey=g4odigc8svnzv0wfljztp572e&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/8l1qhcf5ean8btr5qx6qr/73.mp4?rlkey=fjftd2tv8wvylv0z50a3aw79x&dl=0",
       "https://dl.dropboxusercontent.com/scl/fi/9thre813uyj2go71cuske/67.mp4?rlkey=a8tyr989w2hpy5jw18xu1fzb8&dl=0",
@@ -1219,80 +1144,90 @@
     ];
 
     /* ══════════════════════════════════════════
+       SUPABASE CONFIG
+    ══════════════════════════════════════════ */
+    const SUPABASE_URL = 'https://mkphwvbggkrwxzdvrvyf.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rcGh3dmJnZ2tyd3h6ZHZydnlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjIxNTgsImV4cCI6MjA4OTE5ODE1OH0.Fg-_x1cgdK204djg6Tjxz6JEPlT1PrfZuLqwaj9FKsk';
+
+    function sbHeaders(extra) {
+      return Object.assign({
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json'
+      }, extra || {});
+    }
+
+    async function fetchLeaderboard() {
+      const resp = await fetch(
+        SUPABASE_URL + '/rest/v1/leaderboard?select=player_name,score,played&order=score.desc,played.desc&limit=200',
+        { headers: sbHeaders() }
+      );
+      if (!resp.ok) return [];
+      const rows = await resp.json();
+      // Deduplicate: keep best (highest score, then most played) per player name
+      const best = {};
+      for (const r of rows) {
+        const key = r.player_name.toLowerCase();
+        if (!best[key] ||
+            r.score > best[key].score ||
+            (r.score === best[key].score && r.played > best[key].played)) {
+          best[key] = r;
+        }
+      }
+      return Object.values(best)
+        .sort((a, b) => b.score - a.score || b.played - a.played)
+        .slice(0, 10);
+    }
+
+    async function submitScore(name, accuracy, played) {
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/leaderboard', {
+          method: 'POST',
+          headers: sbHeaders({ 'Prefer': 'return=minimal' }),
+          body: JSON.stringify({ player_name: name, score: accuracy, played: played })
+        });
+      } catch(e) { /* silent fail */ }
+    }
+
+    /* ══════════════════════════════════════════
        STATE
     ══════════════════════════════════════════ */
     let currentVideoName = "";
     let totalPlayed = 0;
     let totalCorrect = 0;
-    let playerName = localStorage.getItem('atmasiddhi_player') || null;
-    let scoreSavedThisSession = false;
-
-    const LB_KEY = 'atmasiddhi_leaderboard';
-
-    /* ══════════════════════════════════════════
-       LEADERBOARD DATA HELPERS
-    ══════════════════════════════════════════ */
-    function getLeaderboard() {
-      try {
-        return JSON.parse(localStorage.getItem(LB_KEY) || '[]');
-      } catch(e) { return []; }
-    }
-
-    function saveToLeaderboard(name, correct, played) {
-      if (!name || played < 3) return false;
-      const accuracy = Math.round((correct / played) * 100);
-      const lb = getLeaderboard();
-      const idx = lb.findIndex(e => e.name.toLowerCase() === name.toLowerCase());
-
-      if (idx >= 0) {
-        const prev = lb[idx];
-        const isBetter = accuracy > prev.accuracy || (accuracy === prev.accuracy && played > prev.played);
-        if (isBetter) {
-          lb[idx] = { name, correct, played, accuracy, date: new Date().toLocaleDateString() };
-        } else {
-          // Accumulate totals
-          lb[idx].correct += correct;
-          lb[idx].played += played;
-          lb[idx].accuracy = Math.round((lb[idx].correct / lb[idx].played) * 100);
-          lb[idx].date = new Date().toLocaleDateString();
-        }
-      } else {
-        lb.push({ name, correct, played, accuracy, date: new Date().toLocaleDateString() });
-      }
-
-      lb.sort((a, b) => b.accuracy - a.accuracy || b.played - a.played);
-      lb.splice(20);
-      localStorage.setItem(LB_KEY, JSON.stringify(lb));
-      return true;
-    }
+    let playerName = null;
+    let firstAnswerGiven = false;
+    let lastSubmittedScore = -1; // track last score submitted to avoid duplicate inserts
 
     /* ══════════════════════════════════════════
-       PLAYER NAME MODAL
-    ══════════════════════════════════════════ */
-    function showNameModal() {
-      document.getElementById('nameModal').classList.add('open');
-      setTimeout(() => document.getElementById('nameInput').focus(), 100);
-    }
-
-    function savePlayerName() {
-      const input = document.getElementById('nameInput').value.trim();
+       JOIN LEADERBOARD (inline section)
+    ═════════════════════════════════════════ */
+    async function joinLeaderboard() {
+      const input = document.getElementById('lbNameInput').value.trim();
       if (!input) {
-        document.getElementById('nameInput').focus();
-        document.getElementById('nameInput').style.borderColor = '#ef4444';
+        const el = document.getElementById('lbNameInput');
+        el.style.borderColor = '#ef4444';
+        el.focus();
         return;
       }
       playerName = input;
-      localStorage.setItem('atmasiddhi_player', playerName);
-      document.getElementById('nameModal').classList.remove('open');
+
+      // Swap form → status
+      document.getElementById('joinLbForm').style.display = 'none';
+      const status = document.getElementById('joinLbStatus');
+      status.style.display = 'block';
+      status.textContent = '⏳ Joining…';
+
+      const accuracy = totalPlayed > 0 ? Math.round((totalCorrect / totalPlayed) * 100) : 0;
+      await submitScore(playerName, accuracy, totalPlayed);
+      lastSubmittedScore = accuracy;
+
+      status.innerHTML = '✓ On the board as <strong>' + escHtml(playerName) + '</strong> — scores update as you play!';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      if (!playerName) {
-        showNameModal();
-      }
-
-      document.getElementById('nameInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') savePlayerName();
+      document.getElementById('lbNameInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') joinLeaderboard();
         else this.style.borderColor = '';
       });
 
@@ -1307,9 +1242,13 @@
     /* ══════════════════════════════════════════
        LEADERBOARD UI
     ══════════════════════════════════════════ */
-    function openLeaderboard() {
-      renderLeaderboard();
-      document.getElementById('lbOverlay').classList.add('open');
+    async function openLeaderboard() {
+      document.getElementById('lbOverlay').c).classList.add('open');
+      // Show loading state
+      document.getElementById('lbContent').innerHTML =
+        '<div class="lb-loading"><div class="spinner"></div><br>Loading leaderboard…</div>';
+      const data = await fetchLeaderboard();
+      renderLeaderboard(data);
     }
 
     function closeLeaderboard() {
@@ -1320,57 +1259,31 @@
       if (e.target === document.getElementById('lbOverlay')) closeLeaderboard();
     }
 
-    function saveScoreToBoard() {
-      if (!playerName) { showNameModal(); return; }
-      if (totalPlayed < 3) {
-        alert('Play at least 3 rounds before saving your score!');
-        return;
-      }
-      saveToLeaderboard(playerName, totalCorrect, totalPlayed);
-      scoreSavedThisSession = true;
-      renderLeaderboard();
-      // Swap save button to badge
-      const btn = document.getElementById('lbSaveBtn');
-      btn.outerHTML = '<span class="lb-saved-badge" id="lbSaveBtn">✓ Saved!</span>';
-    }
-
-    function renderLeaderboard() {
-      // Session bar
-      document.getElementById('lbSessionName').textContent =
-        'Playing as ' + (playerName || '—');
-      const pct = totalPlayed > 0
-        ? Math.round((totalCorrect / totalPlayed) * 100) + '%'
-        : '—';
-      document.getElementById('lbSessionStats').textContent =
-        totalCorrect + '/' + totalPlayed + ' \u00b7 ' + pct;
-
-      // Render table
-      const lb = getLeaderboard();
+    function renderLeaderboard(entries) {
       const container = document.getElementById('lbContent');
 
-      if (lb.length === 0) {
+      if (!entries || entries.length === 0) {
         container.innerHTML = `
           <div class="lb-empty">
             <span class="lb-empty-icon">🏆</span>
-            <p>No scores yet. Play at least 3 rounds, then save your score to be the first on the board!</p>
+            <p>No scores yet — be the first on the global board! Play a few rounds, then join the leaderboard below the game.</p>
           </div>`;
         return;
       }
 
-      const top10 = lb.slice(0, 10);
       const medals = ['🥇','🥈','🥉'];
       const rankClasses = ['gold','silver','bronze'];
 
-      let rows = top10.map((entry, i) => {
-        const isMe = playerName && entry.name.toLowerCase() === playerName.toLowerCase();
+      const rows = entries.map((entry, i) => {
+        const isMe = playerName && entry.player_name.toLowerCase() === playerName.toLowerCase();
         const medal = i < 3 ? `<span class="lb-medal">${medals[i]}</span>` : '';
         const rankClass = i < 3 ? rankClasses[i] : '';
         return `
           <tr class="${isMe ? 'current-player' : ''}">
             <td><span class="lb-rank ${rankClass}">${medal || (i + 1)}</span></td>
-            <td><span class="lb-name">${escHtml(entry.name)}${isMe ? ' <small style="color:var(--gold);font-size:10px;">(you)</small>' : ''}</span></td>
-            <td><span class="lb-accuracy">${entry.accuracy}%</span></td>
-            <td><span class="lb-played">${entry.correct}/${entry.played}</span></td>
+            <td><span class="lb-name">${escHtml(entry.player_name)}${isMe ? ' <small style="color:var(--gold);font-size:10px;">(you)</small>' : ''}</span></td>
+            <td><span class="lb-accuracy">${entry.score}%</span></td>
+            <td><span class="lb-played">${entry.played} rounds</span></td>
           </tr>`;
       }).join('');
 
@@ -1381,7 +1294,7 @@
               <th>#</th>
               <th>Player</th>
               <th>Accuracy</th>
-              <th>Score</th>
+              <th>Rounds</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -1389,7 +1302,7 @@
     }
 
     function escHtml(s) {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     /* ══════════════════════════════════════════
@@ -1433,7 +1346,6 @@
 
       const feedback = document.getElementById("feedback");
       totalPlayed++;
-      scoreSavedThisSession = false;
 
       if (inputVal === currentVideoName) {
         totalCorrect++;
@@ -1446,10 +1358,21 @@
 
       updateScoreboard();
 
-      // Auto-save to leaderboard after 3+ rounds
-      if (totalPlayed >= 3 && playerName && !scoreSavedThisSession) {
-        saveToLeaderboard(playerName, totalCorrect, totalPlayed);
-        scoreSavedThisSession = true;
+      // Show join section after first answer (if not already joined)
+      if (!firstAnswerGiven) {
+        firstAnswerGiven = true;
+        if (!playerName) {
+          document.getElementById('joinLbSection').classList.add('visible');
+        }
+      }
+
+      // Auto-submit updated score if player has joined
+      if (playerName) {
+        const accuracy = Math.round((totalCorrect / totalPlayed) * 100);
+        if (accuracy !== lastSubmittedScore || totalPlayed % 5 === 0) {
+          submitScore(playerName, accuracy, totalPlayed);
+          lastSubmittedScore = accuracy;
+        }
       }
     }
 
