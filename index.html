@@ -1158,6 +1158,7 @@
     }
 
     async function fetchLeaderboard() {
+      try {
       const resp = await fetch(
         SUPABASE_URL + '/rest/v1/leaderboard?select=player_name,score,played&order=score.desc,played.desc&limit=200',
         { headers: sbHeaders() }
@@ -1177,6 +1178,7 @@
       return Object.values(best)
         .sort((a, b) => b.score - a.score || b.played - a.played)
         .slice(0, 10);
+      } catch(e) { return []; }
     }
 
     async function submitScore(name, accuracy, played) {
@@ -1247,8 +1249,12 @@
       // Show loading state
       document.getElementById('lbContent').innerHTML =
         '<div class="lb-loading"><div class="spinner"></div><br>Loading leaderboard…</div>';
-      const data = await fetchLeaderboard();
-      renderLeaderboard(data);
+      try {
+        const data = await fetchLeaderboard();
+        renderLeaderboard(data);
+      } catch(e) {
+        renderLeaderboard([]);
+      }
     }
 
     function closeLeaderboard() {
@@ -1350,7 +1356,7 @@
       if (inputVal === currentVideoName) {
         totalCorrect++;
         feedback.className = "feedback-box visible correct";
-        feedback.innerHTML = '<span class="feedback-icon">🏆</span>Correct! Jai Satchitanand!';
+        feedback.innerHTML = '<span class="feedback-icon">✓</span>Correct!';
       } else {
         feedback.className = "feedback-box visible incorrect";
         feedback.innerHTML = '<span class="feedback-icon">✗</span>Not quite — the correct answer is Gatha <strong>' + currentVideoName + '</strong>.';
