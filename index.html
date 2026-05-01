@@ -2,9 +2,17 @@
 <html lang="en">
 
 <head>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2CF47Y7Z5J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2CF47Y7Z5J');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Atmasiddhi Gatha Quiz</title>
+  <title>Atmasiddhi Gatha Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
@@ -849,7 +857,7 @@
           >
           <h2>Hall of Fame</h2>
         </div>
-        <p>Global Top 10 · Atmasiddhi Gatha Quiz</p>
+        <p>Global Top 10 · Atmasiddhi Gatha Game</p>
       </div>
       <div class="lb-body">
         <div id="lbContent">
@@ -1183,12 +1191,21 @@
 
     async function submitScore(name, accuracy, played) {
       try {
-        await fetch(SUPABASE_URL + '/rest/v1/leaderboard', {
+        const resp = await fetch(SUPABASE_URL + '/rest/v1/leaderboard', {
           method: 'POST',
           headers: sbHeaders({ 'Prefer': 'return=minimal' }),
           body: JSON.stringify({ player_name: name, score: accuracy, played: played })
         });
-      } catch(e) { /* silent fail */ }
+        if (!resp.ok) {
+          const err = await resp.text();
+          console.error('submitScore failed:', resp.status, err);
+          return false;
+        }
+        return true;
+      } catch(e) {
+        console.error('submitScore error:', e);
+        return false;
+      }
     }
 
     /* ==========================================
@@ -1221,10 +1238,16 @@
       status.textContent = '⏳ Joining…';
 
       const accuracy = totalPlayed > 0 ? Math.round((totalCorrect / totalPlayed) * 100) : 0;
-      await submitScore(playerName, accuracy, totalPlayed);
+      gtag('event', 'leaderboard_joined', { player_name: playerName });
+      const ok = await submitScore(playerName, accuracy, totalPlayed);
       lastSubmittedScore = accuracy;
 
-      status.innerHTML = '✓ On the board as <strong>' + escHtml(playerName) + '</strong> — scores update as you play!';
+      if (ok) {
+        status.innerHTML = '✓ On the board as <strong>' + escHtml(playerName) + '</strong> — scores update as you play!';
+      } else {
+        status.innerHTML = '⚠️ Could not reach the leaderboard — check your connection or ask the admin to verify the Supabase table exists.';
+        status.style.color = '#b45309';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1246,6 +1269,7 @@
     ========================================== */
     async function openLeaderboard() {
       document.getElementById('lbOverlay').classList.add('open');
+      gtag('event', 'leaderboard_opened');
       // Show loading state
       document.getElementById('lbContent').innerHTML =
         '<div class="lb-loading"><div class="spinner"></div><br>Loading leaderboard…</div>';
@@ -1352,6 +1376,7 @@
 
       const feedback = document.getElementById("feedback");
       totalPlayed++;
+      gtag('event', 'gatha_answered', { correct: inputVal === currentVideoName });
 
       if (inputVal === currentVideoName) {
         totalCorrect++;
